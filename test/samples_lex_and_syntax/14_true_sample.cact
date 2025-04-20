@@ -1,0 +1,9 @@
+int a[4] = {};
+
+int main()
+{
+	int i, j;
+	i = i + 1;
+	j = get_int();
+	return i;
+}
