@@ -1,6 +1,9 @@
 
     #include <vector>
     #include <string>
+    #include "utils/CACT.h"
+    #include "symbolTable.h"
+    #include "IR/IRBasicBlock.h"
 
 
 // Generated from CACT.g4 by ANTLR 4.13.1
@@ -56,152 +59,165 @@ void cactParserInitialize() {
 #endif
   auto staticData = std::make_unique<CACTParserStaticData>(
     std::vector<std::string>{
-      "functionType", "basicType", "primaryExpression", "unaryExpression", 
-      "unaryOperator", "functionRParams", "additiveExpression", "multiplicativeExpression", 
-      "relationalExpression", "equalityExpression", "logicalAndExpression", 
-      "logicalOrExpression", "condition", "constantExpression", "constantInitValue", 
-      "expression", "declaration", "constantDeclaration", "constantDefinition", 
-      "variableDeclaration", "variableDefinition", "statement", "compoundStatement", 
-      "expressionStatement", "selectionStatement", "iterationStatement", 
-      "jumpStatement", "blockItem", "blockItemList", "leftValue", "compilationUnit", 
-      "translationUnit", "externalDeclaration", "functionDefinition", "functionFParams", 
-      "functionFParam", "number"
+      "compilationUnit", "functionType", "basicType", "primaryExpression", 
+      "unaryExpression", "functionRParams", "unaryOperator", "addOp", "multiplicativeExpression", 
+      "multiplicativeOp", "additiveExpression", "additiveOp", "relationalExpression", 
+      "relationalOp", "equalityExpression", "equalityOp", "logicalAndExpression", 
+      "logicalAndOp", "logicalOrExpression", "logicalOrOp", "expression", 
+      "constantExpression", "condition", "declaration", "constantDeclaration", 
+      "constantDefinition", "constantInitValue", "variableDeclaration", 
+      "variableDefinition", "statement", "compoundStatement", "blockItemList", 
+      "blockItem", "expressionStatement", "lValue", "selectionStatement", 
+      "iterationStatement", "jumpStatement", "translationUnit", "externalDeclaration", 
+      "functionDefinition", "functionFParams", "functionFParam", "number"
     },
     std::vector<std::string>{
-      "", "", "", "", "", "", "", "", "'const'", "'continue'", "'while'", 
-      "'break'", "'true'", "'false'", "'if'", "'else'", "'void'", "'int'", 
-      "'char'", "'float'", "'double'", "'return'", "'('", "')'", "'['", 
-      "']'", "'{'", "'}'", "'<'", "'<='", "'>'", "'>='", "'+'", "'-'", "'*'", 
-      "'/'", "'%'", "'&&'", "'||'", "'!'", "';'", "','", "'='", "'=='", 
-      "'!='", "'.'"
+      "", "", "", "", "'bool'", "'break'", "'const'", "'continue'", "'double'", 
+      "'else'", "'false'", "'float'", "'if'", "'int'", "'return'", "'true'", 
+      "'void'", "'while'", "'('", "')'", "'['", "']'", "'{'", "'}'", "'<'", 
+      "'<='", "'>'", "'>='", "'+'", "'-'", "'*'", "'/'", "'%'", "'&&'", 
+      "'||'", "'!'", "';'", "','", "'='", "'=='", "'!='", "'.'"
     },
     std::vector<std::string>{
-      "", "Whitespace", "Newline", "CommentLine", "CommentBlock", "IntegerConstant", 
-      "FloatingConstant", "CharacterConstant", "Const", "Continue", "While", 
-      "Break", "True", "False", "If", "Else", "Void", "Int", "Char", "Float", 
-      "Double", "Return", "LeftParenthesis", "RightParenthesis", "LeftBracket", 
-      "RightBracket", "LeftBrace", "RightBrace", "Less", "LessEqual", "Greater", 
-      "GreaterEqual", "Plus", "Minus", "Star", "Div", "Mod", "AndAnd", "OrOr", 
-      "Not", "Semicolon", "Comma", "Assign", "Equal", "NotEqual", "Dot", 
-      "Identifier"
+      "", "IntegerConstant", "FloatingConstant", "BooleanConstant", "Bool", 
+      "Break", "Const", "Continue", "Double", "Else", "False", "Float", 
+      "If", "Int", "Return", "True", "Void", "While", "LeftParen", "RightParen", 
+      "LeftBracket", "RightBracket", "LeftBrace", "RightBrace", "Less", 
+      "LessEqual", "Greater", "GreaterEqual", "Plus", "Minus", "Star", "Div", 
+      "Mod", "AndAnd", "OrOr", "Not", "Semi", "Comma", "Assign", "Equal", 
+      "NotEqual", "Dot", "Identifier", "Whitespace", "Newline", "BlockComment", 
+      "LineComment"
     }
   );
   static const int32_t serializedATNSegment[] = {
-  	4,1,46,349,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+  	4,1,46,391,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
   	7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,
   	14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,2,21,7,
   	21,2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,2,27,7,27,2,28,7,
   	28,2,29,7,29,2,30,7,30,2,31,7,31,2,32,7,32,2,33,7,33,2,34,7,34,2,35,7,
-  	35,2,36,7,36,1,0,1,0,3,0,77,8,0,1,1,1,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,3,
-  	2,88,8,2,1,3,1,3,1,3,1,3,1,3,1,3,1,3,3,3,97,8,3,1,3,3,3,100,8,3,1,4,1,
-  	4,1,5,1,5,1,5,5,5,107,8,5,10,5,12,5,110,9,5,1,6,1,6,1,6,5,6,115,8,6,10,
-  	6,12,6,118,9,6,1,7,1,7,1,7,5,7,123,8,7,10,7,12,7,126,9,7,1,8,1,8,1,8,
-  	3,8,131,8,8,1,9,1,9,1,9,3,9,136,8,9,1,10,1,10,1,10,5,10,141,8,10,10,10,
-  	12,10,144,9,10,1,11,1,11,1,11,5,11,149,8,11,10,11,12,11,152,9,11,1,12,
-  	1,12,1,13,1,13,3,13,158,8,13,1,14,1,14,1,14,1,14,1,14,5,14,165,8,14,10,
-  	14,12,14,168,9,14,3,14,170,8,14,1,14,3,14,173,8,14,1,15,1,15,1,16,1,16,
-  	3,16,179,8,16,1,17,1,17,1,17,1,17,1,17,5,17,186,8,17,10,17,12,17,189,
-  	9,17,1,17,1,17,1,18,1,18,1,18,1,18,5,18,197,8,18,10,18,12,18,200,9,18,
-  	1,18,1,18,1,18,1,19,1,19,1,19,1,19,5,19,209,8,19,10,19,12,19,212,9,19,
-  	1,19,1,19,1,20,1,20,1,20,1,20,5,20,220,8,20,10,20,12,20,223,9,20,1,20,
-  	1,20,3,20,227,8,20,1,21,1,21,1,21,1,21,1,21,3,21,234,8,21,1,22,1,22,3,
-  	22,238,8,22,1,22,1,22,1,23,3,23,243,8,23,1,23,1,23,1,23,1,23,1,23,1,23,
-  	3,23,251,8,23,1,24,1,24,1,24,1,24,1,24,1,24,1,24,3,24,260,8,24,1,25,1,
-  	25,1,25,1,25,1,25,1,25,1,26,1,26,1,26,1,26,3,26,272,8,26,3,26,274,8,26,
-  	1,26,1,26,1,27,1,27,3,27,280,8,27,1,28,4,28,283,8,28,11,28,12,28,284,
-  	1,29,1,29,1,29,1,29,1,29,5,29,292,8,29,10,29,12,29,295,9,29,1,30,3,30,
-  	298,8,30,1,30,1,30,1,31,4,31,303,8,31,11,31,12,31,304,1,32,1,32,3,32,
-  	309,8,32,1,33,1,33,1,33,1,33,3,33,315,8,33,1,33,1,33,1,33,1,34,1,34,1,
-  	34,5,34,323,8,34,10,34,12,34,326,9,34,1,35,1,35,1,35,1,35,3,35,332,8,
-  	35,1,35,1,35,1,35,3,35,337,8,35,1,35,5,35,340,8,35,10,35,12,35,343,9,
-  	35,3,35,345,8,35,1,36,1,36,1,36,0,0,37,0,2,4,6,8,10,12,14,16,18,20,22,
-  	24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,
-  	70,72,0,7,1,0,17,20,2,0,32,33,39,39,1,0,32,33,1,0,34,36,1,0,28,31,1,0,
-  	43,44,1,0,5,6,358,0,76,1,0,0,0,2,78,1,0,0,0,4,87,1,0,0,0,6,99,1,0,0,0,
-  	8,101,1,0,0,0,10,103,1,0,0,0,12,111,1,0,0,0,14,119,1,0,0,0,16,127,1,0,
-  	0,0,18,132,1,0,0,0,20,137,1,0,0,0,22,145,1,0,0,0,24,153,1,0,0,0,26,157,
-  	1,0,0,0,28,172,1,0,0,0,30,174,1,0,0,0,32,178,1,0,0,0,34,180,1,0,0,0,36,
-  	192,1,0,0,0,38,204,1,0,0,0,40,215,1,0,0,0,42,233,1,0,0,0,44,235,1,0,0,
-  	0,46,250,1,0,0,0,48,252,1,0,0,0,50,261,1,0,0,0,52,273,1,0,0,0,54,279,
-  	1,0,0,0,56,282,1,0,0,0,58,286,1,0,0,0,60,297,1,0,0,0,62,302,1,0,0,0,64,
-  	308,1,0,0,0,66,310,1,0,0,0,68,319,1,0,0,0,70,327,1,0,0,0,72,346,1,0,0,
-  	0,74,77,5,16,0,0,75,77,3,2,1,0,76,74,1,0,0,0,76,75,1,0,0,0,77,1,1,0,0,
-  	0,78,79,7,0,0,0,79,3,1,0,0,0,80,88,3,58,29,0,81,88,3,72,36,0,82,88,5,
-  	7,0,0,83,84,5,22,0,0,84,85,3,30,15,0,85,86,5,23,0,0,86,88,1,0,0,0,87,
-  	80,1,0,0,0,87,81,1,0,0,0,87,82,1,0,0,0,87,83,1,0,0,0,88,5,1,0,0,0,89,
-  	100,3,4,2,0,90,91,3,8,4,0,91,92,3,6,3,0,92,100,1,0,0,0,93,94,5,46,0,0,
-  	94,96,5,22,0,0,95,97,3,10,5,0,96,95,1,0,0,0,96,97,1,0,0,0,97,98,1,0,0,
-  	0,98,100,5,23,0,0,99,89,1,0,0,0,99,90,1,0,0,0,99,93,1,0,0,0,100,7,1,0,
-  	0,0,101,102,7,1,0,0,102,9,1,0,0,0,103,108,3,30,15,0,104,105,5,41,0,0,
-  	105,107,3,30,15,0,106,104,1,0,0,0,107,110,1,0,0,0,108,106,1,0,0,0,108,
-  	109,1,0,0,0,109,11,1,0,0,0,110,108,1,0,0,0,111,116,3,14,7,0,112,113,7,
-  	2,0,0,113,115,3,14,7,0,114,112,1,0,0,0,115,118,1,0,0,0,116,114,1,0,0,
-  	0,116,117,1,0,0,0,117,13,1,0,0,0,118,116,1,0,0,0,119,124,3,6,3,0,120,
-  	121,7,3,0,0,121,123,3,6,3,0,122,120,1,0,0,0,123,126,1,0,0,0,124,122,1,
-  	0,0,0,124,125,1,0,0,0,125,15,1,0,0,0,126,124,1,0,0,0,127,130,3,12,6,0,
-  	128,129,7,4,0,0,129,131,3,12,6,0,130,128,1,0,0,0,130,131,1,0,0,0,131,
-  	17,1,0,0,0,132,135,3,16,8,0,133,134,7,5,0,0,134,136,3,16,8,0,135,133,
-  	1,0,0,0,135,136,1,0,0,0,136,19,1,0,0,0,137,142,3,18,9,0,138,139,5,37,
-  	0,0,139,141,3,18,9,0,140,138,1,0,0,0,141,144,1,0,0,0,142,140,1,0,0,0,
-  	142,143,1,0,0,0,143,21,1,0,0,0,144,142,1,0,0,0,145,150,3,20,10,0,146,
-  	147,5,38,0,0,147,149,3,20,10,0,148,146,1,0,0,0,149,152,1,0,0,0,150,148,
-  	1,0,0,0,150,151,1,0,0,0,151,23,1,0,0,0,152,150,1,0,0,0,153,154,3,22,11,
-  	0,154,25,1,0,0,0,155,158,3,72,36,0,156,158,5,7,0,0,157,155,1,0,0,0,157,
-  	156,1,0,0,0,158,27,1,0,0,0,159,173,3,26,13,0,160,169,5,26,0,0,161,166,
-  	3,28,14,0,162,163,5,41,0,0,163,165,3,28,14,0,164,162,1,0,0,0,165,168,
-  	1,0,0,0,166,164,1,0,0,0,166,167,1,0,0,0,167,170,1,0,0,0,168,166,1,0,0,
-  	0,169,161,1,0,0,0,169,170,1,0,0,0,170,171,1,0,0,0,171,173,5,27,0,0,172,
-  	159,1,0,0,0,172,160,1,0,0,0,173,29,1,0,0,0,174,175,3,12,6,0,175,31,1,
-  	0,0,0,176,179,3,34,17,0,177,179,3,38,19,0,178,176,1,0,0,0,178,177,1,0,
-  	0,0,179,33,1,0,0,0,180,181,5,8,0,0,181,182,3,2,1,0,182,187,3,36,18,0,
-  	183,184,5,41,0,0,184,186,3,36,18,0,185,183,1,0,0,0,186,189,1,0,0,0,187,
-  	185,1,0,0,0,187,188,1,0,0,0,188,190,1,0,0,0,189,187,1,0,0,0,190,191,5,
-  	40,0,0,191,35,1,0,0,0,192,198,5,46,0,0,193,194,5,24,0,0,194,195,5,5,0,
-  	0,195,197,5,25,0,0,196,193,1,0,0,0,197,200,1,0,0,0,198,196,1,0,0,0,198,
-  	199,1,0,0,0,199,201,1,0,0,0,200,198,1,0,0,0,201,202,5,42,0,0,202,203,
-  	3,28,14,0,203,37,1,0,0,0,204,205,3,2,1,0,205,210,3,40,20,0,206,207,5,
-  	41,0,0,207,209,3,40,20,0,208,206,1,0,0,0,209,212,1,0,0,0,210,208,1,0,
-  	0,0,210,211,1,0,0,0,211,213,1,0,0,0,212,210,1,0,0,0,213,214,5,40,0,0,
-  	214,39,1,0,0,0,215,221,5,46,0,0,216,217,5,24,0,0,217,218,5,5,0,0,218,
-  	220,5,25,0,0,219,216,1,0,0,0,220,223,1,0,0,0,221,219,1,0,0,0,221,222,
-  	1,0,0,0,222,226,1,0,0,0,223,221,1,0,0,0,224,225,5,42,0,0,225,227,3,28,
-  	14,0,226,224,1,0,0,0,226,227,1,0,0,0,227,41,1,0,0,0,228,234,3,44,22,0,
-  	229,234,3,46,23,0,230,234,3,48,24,0,231,234,3,50,25,0,232,234,3,52,26,
-  	0,233,228,1,0,0,0,233,229,1,0,0,0,233,230,1,0,0,0,233,231,1,0,0,0,233,
-  	232,1,0,0,0,234,43,1,0,0,0,235,237,5,26,0,0,236,238,3,56,28,0,237,236,
-  	1,0,0,0,237,238,1,0,0,0,238,239,1,0,0,0,239,240,5,27,0,0,240,45,1,0,0,
-  	0,241,243,3,30,15,0,242,241,1,0,0,0,242,243,1,0,0,0,243,244,1,0,0,0,244,
-  	251,5,40,0,0,245,246,3,58,29,0,246,247,5,42,0,0,247,248,3,30,15,0,248,
-  	249,5,40,0,0,249,251,1,0,0,0,250,242,1,0,0,0,250,245,1,0,0,0,251,47,1,
-  	0,0,0,252,253,5,14,0,0,253,254,5,22,0,0,254,255,3,30,15,0,255,256,5,23,
-  	0,0,256,259,3,42,21,0,257,258,5,15,0,0,258,260,3,42,21,0,259,257,1,0,
-  	0,0,259,260,1,0,0,0,260,49,1,0,0,0,261,262,5,10,0,0,262,263,5,22,0,0,
-  	263,264,3,30,15,0,264,265,5,23,0,0,265,266,3,42,21,0,266,51,1,0,0,0,267,
-  	274,5,9,0,0,268,274,5,11,0,0,269,271,5,21,0,0,270,272,3,30,15,0,271,270,
-  	1,0,0,0,271,272,1,0,0,0,272,274,1,0,0,0,273,267,1,0,0,0,273,268,1,0,0,
-  	0,273,269,1,0,0,0,274,275,1,0,0,0,275,276,5,40,0,0,276,53,1,0,0,0,277,
-  	280,3,42,21,0,278,280,3,32,16,0,279,277,1,0,0,0,279,278,1,0,0,0,280,55,
-  	1,0,0,0,281,283,3,54,27,0,282,281,1,0,0,0,283,284,1,0,0,0,284,282,1,0,
-  	0,0,284,285,1,0,0,0,285,57,1,0,0,0,286,293,5,46,0,0,287,288,5,24,0,0,
-  	288,289,3,30,15,0,289,290,5,25,0,0,290,292,1,0,0,0,291,287,1,0,0,0,292,
-  	295,1,0,0,0,293,291,1,0,0,0,293,294,1,0,0,0,294,59,1,0,0,0,295,293,1,
-  	0,0,0,296,298,3,62,31,0,297,296,1,0,0,0,297,298,1,0,0,0,298,299,1,0,0,
-  	0,299,300,5,0,0,1,300,61,1,0,0,0,301,303,3,64,32,0,302,301,1,0,0,0,303,
-  	304,1,0,0,0,304,302,1,0,0,0,304,305,1,0,0,0,305,63,1,0,0,0,306,309,3,
-  	66,33,0,307,309,3,32,16,0,308,306,1,0,0,0,308,307,1,0,0,0,309,65,1,0,
-  	0,0,310,311,3,0,0,0,311,312,5,46,0,0,312,314,5,22,0,0,313,315,3,68,34,
-  	0,314,313,1,0,0,0,314,315,1,0,0,0,315,316,1,0,0,0,316,317,5,23,0,0,317,
-  	318,3,44,22,0,318,67,1,0,0,0,319,324,3,70,35,0,320,321,5,41,0,0,321,323,
-  	3,70,35,0,322,320,1,0,0,0,323,326,1,0,0,0,324,322,1,0,0,0,324,325,1,0,
-  	0,0,325,69,1,0,0,0,326,324,1,0,0,0,327,328,3,2,1,0,328,344,5,46,0,0,329,
-  	331,5,24,0,0,330,332,5,5,0,0,331,330,1,0,0,0,331,332,1,0,0,0,332,333,
-  	1,0,0,0,333,341,5,25,0,0,334,336,5,24,0,0,335,337,5,5,0,0,336,335,1,0,
-  	0,0,336,337,1,0,0,0,337,338,1,0,0,0,338,340,5,25,0,0,339,334,1,0,0,0,
-  	340,343,1,0,0,0,341,339,1,0,0,0,341,342,1,0,0,0,342,345,1,0,0,0,343,341,
-  	1,0,0,0,344,329,1,0,0,0,344,345,1,0,0,0,345,71,1,0,0,0,346,347,7,6,0,
-  	0,347,73,1,0,0,0,40,76,87,96,99,108,116,124,130,135,142,150,157,166,169,
-  	172,178,187,198,210,221,226,233,237,242,250,259,271,273,279,284,293,297,
-  	304,308,314,324,331,336,341,344
+  	35,2,36,7,36,2,37,7,37,2,38,7,38,2,39,7,39,2,40,7,40,2,41,7,41,2,42,7,
+  	42,2,43,7,43,1,0,3,0,90,8,0,1,0,1,0,1,1,1,1,3,1,96,8,1,1,2,1,2,1,3,1,
+  	3,1,3,1,3,1,3,1,3,3,3,106,8,3,1,4,1,4,1,4,1,4,1,4,1,4,1,4,3,4,115,8,4,
+  	1,4,3,4,118,8,4,1,5,1,5,1,5,5,5,123,8,5,10,5,12,5,126,9,5,1,6,1,6,3,6,
+  	130,8,6,1,7,1,7,1,8,1,8,1,8,1,8,5,8,138,8,8,10,8,12,8,141,9,8,1,9,1,9,
+  	1,10,1,10,1,10,1,10,5,10,149,8,10,10,10,12,10,152,9,10,1,11,1,11,1,12,
+  	1,12,1,12,1,12,3,12,160,8,12,1,13,1,13,1,14,1,14,1,14,1,14,3,14,168,8,
+  	14,1,15,1,15,1,16,1,16,1,16,1,16,5,16,176,8,16,10,16,12,16,179,9,16,1,
+  	17,1,17,1,18,1,18,1,18,1,18,5,18,187,8,18,10,18,12,18,190,9,18,1,19,1,
+  	19,1,20,1,20,3,20,196,8,20,1,21,3,21,199,8,21,1,21,1,21,3,21,203,8,21,
+  	1,22,1,22,1,23,1,23,3,23,209,8,23,1,24,1,24,1,24,1,24,1,24,5,24,216,8,
+  	24,10,24,12,24,219,9,24,1,24,1,24,1,25,1,25,1,25,1,25,5,25,227,8,25,10,
+  	25,12,25,230,9,25,1,25,1,25,1,25,1,26,1,26,1,26,1,26,1,26,5,26,240,8,
+  	26,10,26,12,26,243,9,26,3,26,245,8,26,1,26,3,26,248,8,26,1,27,1,27,1,
+  	27,1,27,5,27,254,8,27,10,27,12,27,257,9,27,1,27,1,27,1,28,1,28,1,28,1,
+  	28,5,28,265,8,28,10,28,12,28,268,9,28,1,28,1,28,3,28,272,8,28,1,29,1,
+  	29,1,29,1,29,1,29,3,29,279,8,29,1,30,1,30,3,30,283,8,30,1,30,1,30,1,31,
+  	4,31,288,8,31,11,31,12,31,289,1,32,1,32,3,32,294,8,32,1,33,3,33,297,8,
+  	33,1,33,1,33,1,33,1,33,1,33,1,33,3,33,305,8,33,1,34,1,34,1,34,1,34,1,
+  	34,5,34,312,8,34,10,34,12,34,315,9,34,1,35,1,35,1,35,1,35,1,35,1,35,1,
+  	35,3,35,324,8,35,1,36,1,36,1,36,1,36,1,36,1,36,1,37,1,37,1,37,1,37,3,
+  	37,336,8,37,3,37,338,8,37,1,37,1,37,1,38,4,38,343,8,38,11,38,12,38,344,
+  	1,39,1,39,3,39,349,8,39,1,40,1,40,1,40,1,40,3,40,355,8,40,1,40,1,40,1,
+  	40,1,41,1,41,1,41,5,41,363,8,41,10,41,12,41,366,9,41,1,42,1,42,1,42,1,
+  	42,3,42,372,8,42,1,42,1,42,1,42,3,42,377,8,42,1,42,5,42,380,8,42,10,42,
+  	12,42,383,9,42,3,42,385,8,42,1,43,1,43,3,43,389,8,43,1,43,0,0,44,0,2,
+  	4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,
+  	52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,0,5,4,0,4,4,8,8,
+  	11,11,13,13,1,0,28,29,1,0,30,32,1,0,24,27,1,0,39,40,396,0,89,1,0,0,0,
+  	2,95,1,0,0,0,4,97,1,0,0,0,6,105,1,0,0,0,8,117,1,0,0,0,10,119,1,0,0,0,
+  	12,129,1,0,0,0,14,131,1,0,0,0,16,133,1,0,0,0,18,142,1,0,0,0,20,144,1,
+  	0,0,0,22,153,1,0,0,0,24,155,1,0,0,0,26,161,1,0,0,0,28,163,1,0,0,0,30,
+  	169,1,0,0,0,32,171,1,0,0,0,34,180,1,0,0,0,36,182,1,0,0,0,38,191,1,0,0,
+  	0,40,195,1,0,0,0,42,202,1,0,0,0,44,204,1,0,0,0,46,208,1,0,0,0,48,210,
+  	1,0,0,0,50,222,1,0,0,0,52,247,1,0,0,0,54,249,1,0,0,0,56,260,1,0,0,0,58,
+  	278,1,0,0,0,60,280,1,0,0,0,62,287,1,0,0,0,64,293,1,0,0,0,66,304,1,0,0,
+  	0,68,306,1,0,0,0,70,316,1,0,0,0,72,325,1,0,0,0,74,337,1,0,0,0,76,342,
+  	1,0,0,0,78,348,1,0,0,0,80,350,1,0,0,0,82,359,1,0,0,0,84,367,1,0,0,0,86,
+  	388,1,0,0,0,88,90,3,76,38,0,89,88,1,0,0,0,89,90,1,0,0,0,90,91,1,0,0,0,
+  	91,92,5,0,0,1,92,1,1,0,0,0,93,96,5,16,0,0,94,96,3,4,2,0,95,93,1,0,0,0,
+  	95,94,1,0,0,0,96,3,1,0,0,0,97,98,7,0,0,0,98,5,1,0,0,0,99,106,3,68,34,
+  	0,100,106,3,86,43,0,101,102,5,18,0,0,102,103,3,40,20,0,103,104,5,19,0,
+  	0,104,106,1,0,0,0,105,99,1,0,0,0,105,100,1,0,0,0,105,101,1,0,0,0,106,
+  	7,1,0,0,0,107,118,3,6,3,0,108,109,3,12,6,0,109,110,3,8,4,0,110,118,1,
+  	0,0,0,111,112,5,42,0,0,112,114,5,18,0,0,113,115,3,10,5,0,114,113,1,0,
+  	0,0,114,115,1,0,0,0,115,116,1,0,0,0,116,118,5,19,0,0,117,107,1,0,0,0,
+  	117,108,1,0,0,0,117,111,1,0,0,0,118,9,1,0,0,0,119,124,3,40,20,0,120,121,
+  	5,37,0,0,121,123,3,40,20,0,122,120,1,0,0,0,123,126,1,0,0,0,124,122,1,
+  	0,0,0,124,125,1,0,0,0,125,11,1,0,0,0,126,124,1,0,0,0,127,130,3,14,7,0,
+  	128,130,5,35,0,0,129,127,1,0,0,0,129,128,1,0,0,0,130,13,1,0,0,0,131,132,
+  	7,1,0,0,132,15,1,0,0,0,133,139,3,8,4,0,134,135,3,18,9,0,135,136,3,8,4,
+  	0,136,138,1,0,0,0,137,134,1,0,0,0,138,141,1,0,0,0,139,137,1,0,0,0,139,
+  	140,1,0,0,0,140,17,1,0,0,0,141,139,1,0,0,0,142,143,7,2,0,0,143,19,1,0,
+  	0,0,144,150,3,16,8,0,145,146,3,22,11,0,146,147,3,16,8,0,147,149,1,0,0,
+  	0,148,145,1,0,0,0,149,152,1,0,0,0,150,148,1,0,0,0,150,151,1,0,0,0,151,
+  	21,1,0,0,0,152,150,1,0,0,0,153,154,7,1,0,0,154,23,1,0,0,0,155,159,3,20,
+  	10,0,156,157,3,26,13,0,157,158,3,20,10,0,158,160,1,0,0,0,159,156,1,0,
+  	0,0,159,160,1,0,0,0,160,25,1,0,0,0,161,162,7,3,0,0,162,27,1,0,0,0,163,
+  	167,3,24,12,0,164,165,3,30,15,0,165,166,3,24,12,0,166,168,1,0,0,0,167,
+  	164,1,0,0,0,167,168,1,0,0,0,168,29,1,0,0,0,169,170,7,4,0,0,170,31,1,0,
+  	0,0,171,177,3,28,14,0,172,173,3,34,17,0,173,174,3,28,14,0,174,176,1,0,
+  	0,0,175,172,1,0,0,0,176,179,1,0,0,0,177,175,1,0,0,0,177,178,1,0,0,0,178,
+  	33,1,0,0,0,179,177,1,0,0,0,180,181,5,33,0,0,181,35,1,0,0,0,182,188,3,
+  	32,16,0,183,184,3,38,19,0,184,185,3,32,16,0,185,187,1,0,0,0,186,183,1,
+  	0,0,0,187,190,1,0,0,0,188,186,1,0,0,0,188,189,1,0,0,0,189,37,1,0,0,0,
+  	190,188,1,0,0,0,191,192,5,34,0,0,192,39,1,0,0,0,193,196,3,20,10,0,194,
+  	196,5,3,0,0,195,193,1,0,0,0,195,194,1,0,0,0,196,41,1,0,0,0,197,199,3,
+  	14,7,0,198,197,1,0,0,0,198,199,1,0,0,0,199,200,1,0,0,0,200,203,3,86,43,
+  	0,201,203,5,3,0,0,202,198,1,0,0,0,202,201,1,0,0,0,203,43,1,0,0,0,204,
+  	205,3,36,18,0,205,45,1,0,0,0,206,209,3,48,24,0,207,209,3,54,27,0,208,
+  	206,1,0,0,0,208,207,1,0,0,0,209,47,1,0,0,0,210,211,5,6,0,0,211,212,3,
+  	4,2,0,212,217,3,50,25,0,213,214,5,37,0,0,214,216,3,50,25,0,215,213,1,
+  	0,0,0,216,219,1,0,0,0,217,215,1,0,0,0,217,218,1,0,0,0,218,220,1,0,0,0,
+  	219,217,1,0,0,0,220,221,5,36,0,0,221,49,1,0,0,0,222,228,5,42,0,0,223,
+  	224,5,20,0,0,224,225,5,1,0,0,225,227,5,21,0,0,226,223,1,0,0,0,227,230,
+  	1,0,0,0,228,226,1,0,0,0,228,229,1,0,0,0,229,231,1,0,0,0,230,228,1,0,0,
+  	0,231,232,5,38,0,0,232,233,3,52,26,0,233,51,1,0,0,0,234,248,3,42,21,0,
+  	235,244,5,22,0,0,236,241,3,52,26,0,237,238,5,37,0,0,238,240,3,52,26,0,
+  	239,237,1,0,0,0,240,243,1,0,0,0,241,239,1,0,0,0,241,242,1,0,0,0,242,245,
+  	1,0,0,0,243,241,1,0,0,0,244,236,1,0,0,0,244,245,1,0,0,0,245,246,1,0,0,
+  	0,246,248,5,23,0,0,247,234,1,0,0,0,247,235,1,0,0,0,248,53,1,0,0,0,249,
+  	250,3,4,2,0,250,255,3,56,28,0,251,252,5,37,0,0,252,254,3,56,28,0,253,
+  	251,1,0,0,0,254,257,1,0,0,0,255,253,1,0,0,0,255,256,1,0,0,0,256,258,1,
+  	0,0,0,257,255,1,0,0,0,258,259,5,36,0,0,259,55,1,0,0,0,260,266,5,42,0,
+  	0,261,262,5,20,0,0,262,263,5,1,0,0,263,265,5,21,0,0,264,261,1,0,0,0,265,
+  	268,1,0,0,0,266,264,1,0,0,0,266,267,1,0,0,0,267,271,1,0,0,0,268,266,1,
+  	0,0,0,269,270,5,38,0,0,270,272,3,52,26,0,271,269,1,0,0,0,271,272,1,0,
+  	0,0,272,57,1,0,0,0,273,279,3,60,30,0,274,279,3,66,33,0,275,279,3,70,35,
+  	0,276,279,3,72,36,0,277,279,3,74,37,0,278,273,1,0,0,0,278,274,1,0,0,0,
+  	278,275,1,0,0,0,278,276,1,0,0,0,278,277,1,0,0,0,279,59,1,0,0,0,280,282,
+  	5,22,0,0,281,283,3,62,31,0,282,281,1,0,0,0,282,283,1,0,0,0,283,284,1,
+  	0,0,0,284,285,5,23,0,0,285,61,1,0,0,0,286,288,3,64,32,0,287,286,1,0,0,
+  	0,288,289,1,0,0,0,289,287,1,0,0,0,289,290,1,0,0,0,290,63,1,0,0,0,291,
+  	294,3,58,29,0,292,294,3,46,23,0,293,291,1,0,0,0,293,292,1,0,0,0,294,65,
+  	1,0,0,0,295,297,3,40,20,0,296,295,1,0,0,0,296,297,1,0,0,0,297,298,1,0,
+  	0,0,298,305,5,36,0,0,299,300,3,68,34,0,300,301,5,38,0,0,301,302,3,40,
+  	20,0,302,303,5,36,0,0,303,305,1,0,0,0,304,296,1,0,0,0,304,299,1,0,0,0,
+  	305,67,1,0,0,0,306,313,5,42,0,0,307,308,5,20,0,0,308,309,3,40,20,0,309,
+  	310,5,21,0,0,310,312,1,0,0,0,311,307,1,0,0,0,312,315,1,0,0,0,313,311,
+  	1,0,0,0,313,314,1,0,0,0,314,69,1,0,0,0,315,313,1,0,0,0,316,317,5,12,0,
+  	0,317,318,5,18,0,0,318,319,3,44,22,0,319,320,5,19,0,0,320,323,3,58,29,
+  	0,321,322,5,9,0,0,322,324,3,58,29,0,323,321,1,0,0,0,323,324,1,0,0,0,324,
+  	71,1,0,0,0,325,326,5,17,0,0,326,327,5,18,0,0,327,328,3,44,22,0,328,329,
+  	5,19,0,0,329,330,3,58,29,0,330,73,1,0,0,0,331,338,5,7,0,0,332,338,5,5,
+  	0,0,333,335,5,14,0,0,334,336,3,40,20,0,335,334,1,0,0,0,335,336,1,0,0,
+  	0,336,338,1,0,0,0,337,331,1,0,0,0,337,332,1,0,0,0,337,333,1,0,0,0,338,
+  	339,1,0,0,0,339,340,5,36,0,0,340,75,1,0,0,0,341,343,3,78,39,0,342,341,
+  	1,0,0,0,343,344,1,0,0,0,344,342,1,0,0,0,344,345,1,0,0,0,345,77,1,0,0,
+  	0,346,349,3,80,40,0,347,349,3,46,23,0,348,346,1,0,0,0,348,347,1,0,0,0,
+  	349,79,1,0,0,0,350,351,3,2,1,0,351,352,5,42,0,0,352,354,5,18,0,0,353,
+  	355,3,82,41,0,354,353,1,0,0,0,354,355,1,0,0,0,355,356,1,0,0,0,356,357,
+  	5,19,0,0,357,358,3,60,30,0,358,81,1,0,0,0,359,364,3,84,42,0,360,361,5,
+  	37,0,0,361,363,3,84,42,0,362,360,1,0,0,0,363,366,1,0,0,0,364,362,1,0,
+  	0,0,364,365,1,0,0,0,365,83,1,0,0,0,366,364,1,0,0,0,367,368,3,4,2,0,368,
+  	384,5,42,0,0,369,371,5,20,0,0,370,372,5,1,0,0,371,370,1,0,0,0,371,372,
+  	1,0,0,0,372,373,1,0,0,0,373,381,5,21,0,0,374,376,5,20,0,0,375,377,5,1,
+  	0,0,376,375,1,0,0,0,376,377,1,0,0,0,377,378,1,0,0,0,378,380,5,21,0,0,
+  	379,374,1,0,0,0,380,383,1,0,0,0,381,379,1,0,0,0,381,382,1,0,0,0,382,385,
+  	1,0,0,0,383,381,1,0,0,0,384,369,1,0,0,0,384,385,1,0,0,0,385,85,1,0,0,
+  	0,386,389,5,1,0,0,387,389,5,2,0,0,388,386,1,0,0,0,388,387,1,0,0,0,389,
+  	87,1,0,0,0,44,89,95,105,114,117,124,129,139,150,159,167,177,188,195,198,
+  	202,208,217,228,241,244,247,255,266,271,278,282,289,293,296,304,313,323,
+  	335,337,344,348,354,364,371,376,381,384,388
   };
   staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
 
@@ -250,6 +266,69 @@ antlr4::atn::SerializedATNView CACTParser::getSerializedATN() const {
 }
 
 
+//----------------- CompilationUnitContext ------------------------------------------------------------------
+
+CACTParser::CompilationUnitContext::CompilationUnitContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* CACTParser::CompilationUnitContext::EOF() {
+  return getToken(CACTParser::EOF, 0);
+}
+
+CACTParser::TranslationUnitContext* CACTParser::CompilationUnitContext::translationUnit() {
+  return getRuleContext<CACTParser::TranslationUnitContext>(0);
+}
+
+
+size_t CACTParser::CompilationUnitContext::getRuleIndex() const {
+  return CACTParser::RuleCompilationUnit;
+}
+
+
+std::any CACTParser::CompilationUnitContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitCompilationUnit(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::CompilationUnitContext* CACTParser::compilationUnit() {
+  CompilationUnitContext *_localctx = _tracker.createInstance<CompilationUnitContext>(_ctx, getState());
+  enterRule(_localctx, 0, CACTParser::RuleCompilationUnit);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(89);
+    _errHandler->sync(this);
+
+    _la = _input->LA(1);
+    if ((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 76112) != 0)) {
+      setState(88);
+      translationUnit();
+    }
+    setState(91);
+    match(CACTParser::EOF);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
 //----------------- FunctionTypeContext ------------------------------------------------------------------
 
 CACTParser::FunctionTypeContext::FunctionTypeContext(ParserRuleContext *parent, size_t invokingState)
@@ -279,7 +358,7 @@ std::any CACTParser::FunctionTypeContext::accept(tree::ParseTreeVisitor *visitor
 
 CACTParser::FunctionTypeContext* CACTParser::functionType() {
   FunctionTypeContext *_localctx = _tracker.createInstance<FunctionTypeContext>(_ctx, getState());
-  enterRule(_localctx, 0, CACTParser::RuleFunctionType);
+  enterRule(_localctx, 2, CACTParser::RuleFunctionType);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -289,22 +368,22 @@ CACTParser::FunctionTypeContext* CACTParser::functionType() {
     exitRule();
   });
   try {
-    setState(76);
+    setState(95);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case CACTParser::Void: {
         enterOuterAlt(_localctx, 1);
-        setState(74);
+        setState(93);
         match(CACTParser::Void);
         break;
       }
 
-      case CACTParser::Int:
-      case CACTParser::Char:
+      case CACTParser::Bool:
+      case CACTParser::Double:
       case CACTParser::Float:
-      case CACTParser::Double: {
+      case CACTParser::Int: {
         enterOuterAlt(_localctx, 2);
-        setState(75);
+        setState(94);
         basicType();
         break;
       }
@@ -333,8 +412,8 @@ tree::TerminalNode* CACTParser::BasicTypeContext::Int() {
   return getToken(CACTParser::Int, 0);
 }
 
-tree::TerminalNode* CACTParser::BasicTypeContext::Char() {
-  return getToken(CACTParser::Char, 0);
+tree::TerminalNode* CACTParser::BasicTypeContext::Bool() {
+  return getToken(CACTParser::Bool, 0);
 }
 
 tree::TerminalNode* CACTParser::BasicTypeContext::Float() {
@@ -360,7 +439,7 @@ std::any CACTParser::BasicTypeContext::accept(tree::ParseTreeVisitor *visitor) {
 
 CACTParser::BasicTypeContext* CACTParser::basicType() {
   BasicTypeContext *_localctx = _tracker.createInstance<BasicTypeContext>(_ctx, getState());
-  enterRule(_localctx, 2, CACTParser::RuleBasicType);
+  enterRule(_localctx, 4, CACTParser::RuleBasicType);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -372,10 +451,10 @@ CACTParser::BasicTypeContext* CACTParser::basicType() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(78);
+    setState(97);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 1966080) != 0))) {
+      ((1ULL << _la) & 10512) != 0))) {
     _errHandler->recoverInline(this);
     }
     else {
@@ -399,28 +478,24 @@ CACTParser::PrimaryExpressionContext::PrimaryExpressionContext(ParserRuleContext
   : ParserRuleContext(parent, invokingState) {
 }
 
-CACTParser::LeftValueContext* CACTParser::PrimaryExpressionContext::leftValue() {
-  return getRuleContext<CACTParser::LeftValueContext>(0);
+CACTParser::LValueContext* CACTParser::PrimaryExpressionContext::lValue() {
+  return getRuleContext<CACTParser::LValueContext>(0);
 }
 
 CACTParser::NumberContext* CACTParser::PrimaryExpressionContext::number() {
   return getRuleContext<CACTParser::NumberContext>(0);
 }
 
-tree::TerminalNode* CACTParser::PrimaryExpressionContext::CharacterConstant() {
-  return getToken(CACTParser::CharacterConstant, 0);
-}
-
-tree::TerminalNode* CACTParser::PrimaryExpressionContext::LeftParenthesis() {
-  return getToken(CACTParser::LeftParenthesis, 0);
+tree::TerminalNode* CACTParser::PrimaryExpressionContext::LeftParen() {
+  return getToken(CACTParser::LeftParen, 0);
 }
 
 CACTParser::ExpressionContext* CACTParser::PrimaryExpressionContext::expression() {
   return getRuleContext<CACTParser::ExpressionContext>(0);
 }
 
-tree::TerminalNode* CACTParser::PrimaryExpressionContext::RightParenthesis() {
-  return getToken(CACTParser::RightParenthesis, 0);
+tree::TerminalNode* CACTParser::PrimaryExpressionContext::RightParen() {
+  return getToken(CACTParser::RightParen, 0);
 }
 
 
@@ -438,7 +513,7 @@ std::any CACTParser::PrimaryExpressionContext::accept(tree::ParseTreeVisitor *vi
 
 CACTParser::PrimaryExpressionContext* CACTParser::primaryExpression() {
   PrimaryExpressionContext *_localctx = _tracker.createInstance<PrimaryExpressionContext>(_ctx, getState());
-  enterRule(_localctx, 4, CACTParser::RulePrimaryExpression);
+  enterRule(_localctx, 6, CACTParser::RulePrimaryExpression);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -448,39 +523,32 @@ CACTParser::PrimaryExpressionContext* CACTParser::primaryExpression() {
     exitRule();
   });
   try {
-    setState(87);
+    setState(105);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case CACTParser::Identifier: {
         enterOuterAlt(_localctx, 1);
-        setState(80);
-        leftValue();
+        setState(99);
+        lValue();
         break;
       }
 
       case CACTParser::IntegerConstant:
       case CACTParser::FloatingConstant: {
         enterOuterAlt(_localctx, 2);
-        setState(81);
+        setState(100);
         number();
         break;
       }
 
-      case CACTParser::CharacterConstant: {
+      case CACTParser::LeftParen: {
         enterOuterAlt(_localctx, 3);
-        setState(82);
-        match(CACTParser::CharacterConstant);
-        break;
-      }
-
-      case CACTParser::LeftParenthesis: {
-        enterOuterAlt(_localctx, 4);
-        setState(83);
-        match(CACTParser::LeftParenthesis);
-        setState(84);
+        setState(101);
+        match(CACTParser::LeftParen);
+        setState(102);
         expression();
-        setState(85);
-        match(CACTParser::RightParenthesis);
+        setState(103);
+        match(CACTParser::RightParen);
         break;
       }
 
@@ -520,12 +588,12 @@ tree::TerminalNode* CACTParser::UnaryExpressionContext::Identifier() {
   return getToken(CACTParser::Identifier, 0);
 }
 
-tree::TerminalNode* CACTParser::UnaryExpressionContext::LeftParenthesis() {
-  return getToken(CACTParser::LeftParenthesis, 0);
+tree::TerminalNode* CACTParser::UnaryExpressionContext::LeftParen() {
+  return getToken(CACTParser::LeftParen, 0);
 }
 
-tree::TerminalNode* CACTParser::UnaryExpressionContext::RightParenthesis() {
-  return getToken(CACTParser::RightParenthesis, 0);
+tree::TerminalNode* CACTParser::UnaryExpressionContext::RightParen() {
+  return getToken(CACTParser::RightParen, 0);
 }
 
 CACTParser::FunctionRParamsContext* CACTParser::UnaryExpressionContext::functionRParams() {
@@ -547,7 +615,7 @@ std::any CACTParser::UnaryExpressionContext::accept(tree::ParseTreeVisitor *visi
 
 CACTParser::UnaryExpressionContext* CACTParser::unaryExpression() {
   UnaryExpressionContext *_localctx = _tracker.createInstance<UnaryExpressionContext>(_ctx, getState());
-  enterRule(_localctx, 6, CACTParser::RuleUnaryExpression);
+  enterRule(_localctx, 8, CACTParser::RuleUnaryExpression);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -558,113 +626,47 @@ CACTParser::UnaryExpressionContext* CACTParser::unaryExpression() {
     exitRule();
   });
   try {
-    setState(99);
+    setState(117);
     _errHandler->sync(this);
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 3, _ctx)) {
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 4, _ctx)) {
     case 1: {
       enterOuterAlt(_localctx, 1);
-      setState(89);
+      setState(107);
       primaryExpression();
       break;
     }
 
     case 2: {
       enterOuterAlt(_localctx, 2);
-      setState(90);
+      setState(108);
       unaryOperator();
-      setState(91);
+      setState(109);
       unaryExpression();
       break;
     }
 
     case 3: {
       enterOuterAlt(_localctx, 3);
-      setState(93);
+      setState(111);
       match(CACTParser::Identifier);
-      setState(94);
-      match(CACTParser::LeftParenthesis);
-      setState(96);
+      setState(112);
+      match(CACTParser::LeftParen);
+      setState(114);
       _errHandler->sync(this);
 
       _la = _input->LA(1);
       if ((((_la & ~ 0x3fULL) == 0) &&
-        ((1ULL << _la) & 70931389087968) != 0)) {
-        setState(95);
+        ((1ULL << _la) & 4433211817998) != 0)) {
+        setState(113);
         functionRParams();
       }
-      setState(98);
-      match(CACTParser::RightParenthesis);
+      setState(116);
+      match(CACTParser::RightParen);
       break;
     }
 
     default:
       break;
-    }
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- UnaryOperatorContext ------------------------------------------------------------------
-
-CACTParser::UnaryOperatorContext::UnaryOperatorContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-tree::TerminalNode* CACTParser::UnaryOperatorContext::Plus() {
-  return getToken(CACTParser::Plus, 0);
-}
-
-tree::TerminalNode* CACTParser::UnaryOperatorContext::Minus() {
-  return getToken(CACTParser::Minus, 0);
-}
-
-tree::TerminalNode* CACTParser::UnaryOperatorContext::Not() {
-  return getToken(CACTParser::Not, 0);
-}
-
-
-size_t CACTParser::UnaryOperatorContext::getRuleIndex() const {
-  return CACTParser::RuleUnaryOperator;
-}
-
-
-std::any CACTParser::UnaryOperatorContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
-    return parserVisitor->visitUnaryOperator(this);
-  else
-    return visitor->visitChildren(this);
-}
-
-CACTParser::UnaryOperatorContext* CACTParser::unaryOperator() {
-  UnaryOperatorContext *_localctx = _tracker.createInstance<UnaryOperatorContext>(_ctx, getState());
-  enterRule(_localctx, 8, CACTParser::RuleUnaryOperator);
-  size_t _la = 0;
-
-#if __cplusplus > 201703L
-  auto onExit = finally([=, this] {
-#else
-  auto onExit = finally([=] {
-#endif
-    exitRule();
-  });
-  try {
-    enterOuterAlt(_localctx, 1);
-    setState(101);
-    _la = _input->LA(1);
-    if (!((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 562640715776) != 0))) {
-    _errHandler->recoverInline(this);
-    }
-    else {
-      _errHandler->reportMatch(this);
-      consume();
     }
    
   }
@@ -726,17 +728,17 @@ CACTParser::FunctionRParamsContext* CACTParser::functionRParams() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(103);
+    setState(119);
     expression();
-    setState(108);
+    setState(124);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == CACTParser::Comma) {
-      setState(104);
+      setState(120);
       match(CACTParser::Comma);
-      setState(105);
+      setState(121);
       expression();
-      setState(110);
+      setState(126);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
@@ -751,52 +753,107 @@ CACTParser::FunctionRParamsContext* CACTParser::functionRParams() {
   return _localctx;
 }
 
-//----------------- AdditiveExpressionContext ------------------------------------------------------------------
+//----------------- UnaryOperatorContext ------------------------------------------------------------------
 
-CACTParser::AdditiveExpressionContext::AdditiveExpressionContext(ParserRuleContext *parent, size_t invokingState)
+CACTParser::UnaryOperatorContext::UnaryOperatorContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<CACTParser::MultiplicativeExpressionContext *> CACTParser::AdditiveExpressionContext::multiplicativeExpression() {
-  return getRuleContexts<CACTParser::MultiplicativeExpressionContext>();
+CACTParser::AddOpContext* CACTParser::UnaryOperatorContext::addOp() {
+  return getRuleContext<CACTParser::AddOpContext>(0);
 }
 
-CACTParser::MultiplicativeExpressionContext* CACTParser::AdditiveExpressionContext::multiplicativeExpression(size_t i) {
-  return getRuleContext<CACTParser::MultiplicativeExpressionContext>(i);
-}
-
-std::vector<tree::TerminalNode *> CACTParser::AdditiveExpressionContext::Plus() {
-  return getTokens(CACTParser::Plus);
-}
-
-tree::TerminalNode* CACTParser::AdditiveExpressionContext::Plus(size_t i) {
-  return getToken(CACTParser::Plus, i);
-}
-
-std::vector<tree::TerminalNode *> CACTParser::AdditiveExpressionContext::Minus() {
-  return getTokens(CACTParser::Minus);
-}
-
-tree::TerminalNode* CACTParser::AdditiveExpressionContext::Minus(size_t i) {
-  return getToken(CACTParser::Minus, i);
+tree::TerminalNode* CACTParser::UnaryOperatorContext::Not() {
+  return getToken(CACTParser::Not, 0);
 }
 
 
-size_t CACTParser::AdditiveExpressionContext::getRuleIndex() const {
-  return CACTParser::RuleAdditiveExpression;
+size_t CACTParser::UnaryOperatorContext::getRuleIndex() const {
+  return CACTParser::RuleUnaryOperator;
 }
 
 
-std::any CACTParser::AdditiveExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+std::any CACTParser::UnaryOperatorContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
-    return parserVisitor->visitAdditiveExpression(this);
+    return parserVisitor->visitUnaryOperator(this);
   else
     return visitor->visitChildren(this);
 }
 
-CACTParser::AdditiveExpressionContext* CACTParser::additiveExpression() {
-  AdditiveExpressionContext *_localctx = _tracker.createInstance<AdditiveExpressionContext>(_ctx, getState());
-  enterRule(_localctx, 12, CACTParser::RuleAdditiveExpression);
+CACTParser::UnaryOperatorContext* CACTParser::unaryOperator() {
+  UnaryOperatorContext *_localctx = _tracker.createInstance<UnaryOperatorContext>(_ctx, getState());
+  enterRule(_localctx, 12, CACTParser::RuleUnaryOperator);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(129);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case CACTParser::Plus:
+      case CACTParser::Minus: {
+        enterOuterAlt(_localctx, 1);
+        setState(127);
+        addOp();
+        break;
+      }
+
+      case CACTParser::Not: {
+        enterOuterAlt(_localctx, 2);
+        setState(128);
+        match(CACTParser::Not);
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- AddOpContext ------------------------------------------------------------------
+
+CACTParser::AddOpContext::AddOpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* CACTParser::AddOpContext::Plus() {
+  return getToken(CACTParser::Plus, 0);
+}
+
+tree::TerminalNode* CACTParser::AddOpContext::Minus() {
+  return getToken(CACTParser::Minus, 0);
+}
+
+
+size_t CACTParser::AddOpContext::getRuleIndex() const {
+  return CACTParser::RuleAddOp;
+}
+
+
+std::any CACTParser::AddOpContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitAddOp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::AddOpContext* CACTParser::addOp() {
+  AddOpContext *_localctx = _tracker.createInstance<AddOpContext>(_ctx, getState());
+  enterRule(_localctx, 14, CACTParser::RuleAddOp);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -808,31 +865,16 @@ CACTParser::AdditiveExpressionContext* CACTParser::additiveExpression() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(111);
-    multiplicativeExpression();
-    setState(116);
-    _errHandler->sync(this);
+    setState(131);
     _la = _input->LA(1);
-    while (_la == CACTParser::Plus
+    if (!(_la == CACTParser::Plus
 
-    || _la == CACTParser::Minus) {
-      setState(112);
-      antlrcpp::downCast<AdditiveExpressionContext *>(_localctx)->op = _input->LT(1);
-      _la = _input->LA(1);
-      if (!(_la == CACTParser::Plus
-
-      || _la == CACTParser::Minus)) {
-        antlrcpp::downCast<AdditiveExpressionContext *>(_localctx)->op = _errHandler->recoverInline(this);
-      }
-      else {
-        _errHandler->reportMatch(this);
-        consume();
-      }
-      setState(113);
-      multiplicativeExpression();
-      setState(118);
-      _errHandler->sync(this);
-      _la = _input->LA(1);
+    || _la == CACTParser::Minus)) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
     }
    
   }
@@ -859,28 +901,12 @@ CACTParser::UnaryExpressionContext* CACTParser::MultiplicativeExpressionContext:
   return getRuleContext<CACTParser::UnaryExpressionContext>(i);
 }
 
-std::vector<tree::TerminalNode *> CACTParser::MultiplicativeExpressionContext::Star() {
-  return getTokens(CACTParser::Star);
+std::vector<CACTParser::MultiplicativeOpContext *> CACTParser::MultiplicativeExpressionContext::multiplicativeOp() {
+  return getRuleContexts<CACTParser::MultiplicativeOpContext>();
 }
 
-tree::TerminalNode* CACTParser::MultiplicativeExpressionContext::Star(size_t i) {
-  return getToken(CACTParser::Star, i);
-}
-
-std::vector<tree::TerminalNode *> CACTParser::MultiplicativeExpressionContext::Div() {
-  return getTokens(CACTParser::Div);
-}
-
-tree::TerminalNode* CACTParser::MultiplicativeExpressionContext::Div(size_t i) {
-  return getToken(CACTParser::Div, i);
-}
-
-std::vector<tree::TerminalNode *> CACTParser::MultiplicativeExpressionContext::Mod() {
-  return getTokens(CACTParser::Mod);
-}
-
-tree::TerminalNode* CACTParser::MultiplicativeExpressionContext::Mod(size_t i) {
-  return getToken(CACTParser::Mod, i);
+CACTParser::MultiplicativeOpContext* CACTParser::MultiplicativeExpressionContext::multiplicativeOp(size_t i) {
+  return getRuleContext<CACTParser::MultiplicativeOpContext>(i);
 }
 
 
@@ -898,7 +924,7 @@ std::any CACTParser::MultiplicativeExpressionContext::accept(tree::ParseTreeVisi
 
 CACTParser::MultiplicativeExpressionContext* CACTParser::multiplicativeExpression() {
   MultiplicativeExpressionContext *_localctx = _tracker.createInstance<MultiplicativeExpressionContext>(_ctx, getState());
-  enterRule(_localctx, 14, CACTParser::RuleMultiplicativeExpression);
+  enterRule(_localctx, 16, CACTParser::RuleMultiplicativeExpression);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -910,29 +936,225 @@ CACTParser::MultiplicativeExpressionContext* CACTParser::multiplicativeExpressio
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(119);
+    setState(133);
     unaryExpression();
-    setState(124);
+    setState(139);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 120259084288) != 0)) {
-      setState(120);
-      antlrcpp::downCast<MultiplicativeExpressionContext *>(_localctx)->op = _input->LT(1);
-      _la = _input->LA(1);
-      if (!((((_la & ~ 0x3fULL) == 0) &&
-        ((1ULL << _la) & 120259084288) != 0))) {
-        antlrcpp::downCast<MultiplicativeExpressionContext *>(_localctx)->op = _errHandler->recoverInline(this);
-      }
-      else {
-        _errHandler->reportMatch(this);
-        consume();
-      }
-      setState(121);
+      ((1ULL << _la) & 7516192768) != 0)) {
+      setState(134);
+      multiplicativeOp();
+      setState(135);
       unaryExpression();
-      setState(126);
+      setState(141);
       _errHandler->sync(this);
       _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- MultiplicativeOpContext ------------------------------------------------------------------
+
+CACTParser::MultiplicativeOpContext::MultiplicativeOpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* CACTParser::MultiplicativeOpContext::Star() {
+  return getToken(CACTParser::Star, 0);
+}
+
+tree::TerminalNode* CACTParser::MultiplicativeOpContext::Div() {
+  return getToken(CACTParser::Div, 0);
+}
+
+tree::TerminalNode* CACTParser::MultiplicativeOpContext::Mod() {
+  return getToken(CACTParser::Mod, 0);
+}
+
+
+size_t CACTParser::MultiplicativeOpContext::getRuleIndex() const {
+  return CACTParser::RuleMultiplicativeOp;
+}
+
+
+std::any CACTParser::MultiplicativeOpContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitMultiplicativeOp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::MultiplicativeOpContext* CACTParser::multiplicativeOp() {
+  MultiplicativeOpContext *_localctx = _tracker.createInstance<MultiplicativeOpContext>(_ctx, getState());
+  enterRule(_localctx, 18, CACTParser::RuleMultiplicativeOp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(142);
+    _la = _input->LA(1);
+    if (!((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 7516192768) != 0))) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- AdditiveExpressionContext ------------------------------------------------------------------
+
+CACTParser::AdditiveExpressionContext::AdditiveExpressionContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+std::vector<CACTParser::MultiplicativeExpressionContext *> CACTParser::AdditiveExpressionContext::multiplicativeExpression() {
+  return getRuleContexts<CACTParser::MultiplicativeExpressionContext>();
+}
+
+CACTParser::MultiplicativeExpressionContext* CACTParser::AdditiveExpressionContext::multiplicativeExpression(size_t i) {
+  return getRuleContext<CACTParser::MultiplicativeExpressionContext>(i);
+}
+
+std::vector<CACTParser::AdditiveOpContext *> CACTParser::AdditiveExpressionContext::additiveOp() {
+  return getRuleContexts<CACTParser::AdditiveOpContext>();
+}
+
+CACTParser::AdditiveOpContext* CACTParser::AdditiveExpressionContext::additiveOp(size_t i) {
+  return getRuleContext<CACTParser::AdditiveOpContext>(i);
+}
+
+
+size_t CACTParser::AdditiveExpressionContext::getRuleIndex() const {
+  return CACTParser::RuleAdditiveExpression;
+}
+
+
+std::any CACTParser::AdditiveExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitAdditiveExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::AdditiveExpressionContext* CACTParser::additiveExpression() {
+  AdditiveExpressionContext *_localctx = _tracker.createInstance<AdditiveExpressionContext>(_ctx, getState());
+  enterRule(_localctx, 20, CACTParser::RuleAdditiveExpression);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(144);
+    multiplicativeExpression();
+    setState(150);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == CACTParser::Plus
+
+    || _la == CACTParser::Minus) {
+      setState(145);
+      additiveOp();
+      setState(146);
+      multiplicativeExpression();
+      setState(152);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- AdditiveOpContext ------------------------------------------------------------------
+
+CACTParser::AdditiveOpContext::AdditiveOpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* CACTParser::AdditiveOpContext::Plus() {
+  return getToken(CACTParser::Plus, 0);
+}
+
+tree::TerminalNode* CACTParser::AdditiveOpContext::Minus() {
+  return getToken(CACTParser::Minus, 0);
+}
+
+
+size_t CACTParser::AdditiveOpContext::getRuleIndex() const {
+  return CACTParser::RuleAdditiveOp;
+}
+
+
+std::any CACTParser::AdditiveOpContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitAdditiveOp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::AdditiveOpContext* CACTParser::additiveOp() {
+  AdditiveOpContext *_localctx = _tracker.createInstance<AdditiveOpContext>(_ctx, getState());
+  enterRule(_localctx, 22, CACTParser::RuleAdditiveOp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(153);
+    _la = _input->LA(1);
+    if (!(_la == CACTParser::Plus
+
+    || _la == CACTParser::Minus)) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
     }
    
   }
@@ -959,20 +1181,8 @@ CACTParser::AdditiveExpressionContext* CACTParser::RelationalExpressionContext::
   return getRuleContext<CACTParser::AdditiveExpressionContext>(i);
 }
 
-tree::TerminalNode* CACTParser::RelationalExpressionContext::Less() {
-  return getToken(CACTParser::Less, 0);
-}
-
-tree::TerminalNode* CACTParser::RelationalExpressionContext::Greater() {
-  return getToken(CACTParser::Greater, 0);
-}
-
-tree::TerminalNode* CACTParser::RelationalExpressionContext::LessEqual() {
-  return getToken(CACTParser::LessEqual, 0);
-}
-
-tree::TerminalNode* CACTParser::RelationalExpressionContext::GreaterEqual() {
-  return getToken(CACTParser::GreaterEqual, 0);
+CACTParser::RelationalOpContext* CACTParser::RelationalExpressionContext::relationalOp() {
+  return getRuleContext<CACTParser::RelationalOpContext>(0);
 }
 
 
@@ -990,7 +1200,7 @@ std::any CACTParser::RelationalExpressionContext::accept(tree::ParseTreeVisitor 
 
 CACTParser::RelationalExpressionContext* CACTParser::relationalExpression() {
   RelationalExpressionContext *_localctx = _tracker.createInstance<RelationalExpressionContext>(_ctx, getState());
-  enterRule(_localctx, 16, CACTParser::RuleRelationalExpression);
+  enterRule(_localctx, 24, CACTParser::RuleRelationalExpression);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1002,27 +1212,88 @@ CACTParser::RelationalExpressionContext* CACTParser::relationalExpression() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(127);
+    setState(155);
     additiveExpression();
-    setState(130);
+    setState(159);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 4026531840) != 0)) {
-      setState(128);
-      antlrcpp::downCast<RelationalExpressionContext *>(_localctx)->op = _input->LT(1);
-      _la = _input->LA(1);
-      if (!((((_la & ~ 0x3fULL) == 0) &&
-        ((1ULL << _la) & 4026531840) != 0))) {
-        antlrcpp::downCast<RelationalExpressionContext *>(_localctx)->op = _errHandler->recoverInline(this);
-      }
-      else {
-        _errHandler->reportMatch(this);
-        consume();
-      }
-      setState(129);
+      ((1ULL << _la) & 251658240) != 0)) {
+      setState(156);
+      relationalOp();
+      setState(157);
       additiveExpression();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- RelationalOpContext ------------------------------------------------------------------
+
+CACTParser::RelationalOpContext::RelationalOpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* CACTParser::RelationalOpContext::Less() {
+  return getToken(CACTParser::Less, 0);
+}
+
+tree::TerminalNode* CACTParser::RelationalOpContext::Greater() {
+  return getToken(CACTParser::Greater, 0);
+}
+
+tree::TerminalNode* CACTParser::RelationalOpContext::LessEqual() {
+  return getToken(CACTParser::LessEqual, 0);
+}
+
+tree::TerminalNode* CACTParser::RelationalOpContext::GreaterEqual() {
+  return getToken(CACTParser::GreaterEqual, 0);
+}
+
+
+size_t CACTParser::RelationalOpContext::getRuleIndex() const {
+  return CACTParser::RuleRelationalOp;
+}
+
+
+std::any CACTParser::RelationalOpContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitRelationalOp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::RelationalOpContext* CACTParser::relationalOp() {
+  RelationalOpContext *_localctx = _tracker.createInstance<RelationalOpContext>(_ctx, getState());
+  enterRule(_localctx, 26, CACTParser::RuleRelationalOp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(161);
+    _la = _input->LA(1);
+    if (!((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 251658240) != 0))) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
     }
    
   }
@@ -1049,12 +1320,8 @@ CACTParser::RelationalExpressionContext* CACTParser::EqualityExpressionContext::
   return getRuleContext<CACTParser::RelationalExpressionContext>(i);
 }
 
-tree::TerminalNode* CACTParser::EqualityExpressionContext::Equal() {
-  return getToken(CACTParser::Equal, 0);
-}
-
-tree::TerminalNode* CACTParser::EqualityExpressionContext::NotEqual() {
-  return getToken(CACTParser::NotEqual, 0);
+CACTParser::EqualityOpContext* CACTParser::EqualityExpressionContext::equalityOp() {
+  return getRuleContext<CACTParser::EqualityOpContext>(0);
 }
 
 
@@ -1072,7 +1339,7 @@ std::any CACTParser::EqualityExpressionContext::accept(tree::ParseTreeVisitor *v
 
 CACTParser::EqualityExpressionContext* CACTParser::equalityExpression() {
   EqualityExpressionContext *_localctx = _tracker.createInstance<EqualityExpressionContext>(_ctx, getState());
-  enterRule(_localctx, 18, CACTParser::RuleEqualityExpression);
+  enterRule(_localctx, 28, CACTParser::RuleEqualityExpression);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1084,29 +1351,82 @@ CACTParser::EqualityExpressionContext* CACTParser::equalityExpression() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(132);
+    setState(163);
     relationalExpression();
-    setState(135);
+    setState(167);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == CACTParser::Equal
 
     || _la == CACTParser::NotEqual) {
-      setState(133);
-      antlrcpp::downCast<EqualityExpressionContext *>(_localctx)->op = _input->LT(1);
-      _la = _input->LA(1);
-      if (!(_la == CACTParser::Equal
-
-      || _la == CACTParser::NotEqual)) {
-        antlrcpp::downCast<EqualityExpressionContext *>(_localctx)->op = _errHandler->recoverInline(this);
-      }
-      else {
-        _errHandler->reportMatch(this);
-        consume();
-      }
-      setState(134);
+      setState(164);
+      equalityOp();
+      setState(165);
       relationalExpression();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- EqualityOpContext ------------------------------------------------------------------
+
+CACTParser::EqualityOpContext::EqualityOpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* CACTParser::EqualityOpContext::Equal() {
+  return getToken(CACTParser::Equal, 0);
+}
+
+tree::TerminalNode* CACTParser::EqualityOpContext::NotEqual() {
+  return getToken(CACTParser::NotEqual, 0);
+}
+
+
+size_t CACTParser::EqualityOpContext::getRuleIndex() const {
+  return CACTParser::RuleEqualityOp;
+}
+
+
+std::any CACTParser::EqualityOpContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitEqualityOp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::EqualityOpContext* CACTParser::equalityOp() {
+  EqualityOpContext *_localctx = _tracker.createInstance<EqualityOpContext>(_ctx, getState());
+  enterRule(_localctx, 30, CACTParser::RuleEqualityOp);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(169);
+    _la = _input->LA(1);
+    if (!(_la == CACTParser::Equal
+
+    || _la == CACTParser::NotEqual)) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
     }
    
   }
@@ -1133,12 +1453,12 @@ CACTParser::EqualityExpressionContext* CACTParser::LogicalAndExpressionContext::
   return getRuleContext<CACTParser::EqualityExpressionContext>(i);
 }
 
-std::vector<tree::TerminalNode *> CACTParser::LogicalAndExpressionContext::AndAnd() {
-  return getTokens(CACTParser::AndAnd);
+std::vector<CACTParser::LogicalAndOpContext *> CACTParser::LogicalAndExpressionContext::logicalAndOp() {
+  return getRuleContexts<CACTParser::LogicalAndOpContext>();
 }
 
-tree::TerminalNode* CACTParser::LogicalAndExpressionContext::AndAnd(size_t i) {
-  return getToken(CACTParser::AndAnd, i);
+CACTParser::LogicalAndOpContext* CACTParser::LogicalAndExpressionContext::logicalAndOp(size_t i) {
+  return getRuleContext<CACTParser::LogicalAndOpContext>(i);
 }
 
 
@@ -1156,7 +1476,7 @@ std::any CACTParser::LogicalAndExpressionContext::accept(tree::ParseTreeVisitor 
 
 CACTParser::LogicalAndExpressionContext* CACTParser::logicalAndExpression() {
   LogicalAndExpressionContext *_localctx = _tracker.createInstance<LogicalAndExpressionContext>(_ctx, getState());
-  enterRule(_localctx, 20, CACTParser::RuleLogicalAndExpression);
+  enterRule(_localctx, 32, CACTParser::RuleLogicalAndExpression);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1168,20 +1488,69 @@ CACTParser::LogicalAndExpressionContext* CACTParser::logicalAndExpression() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(137);
+    setState(171);
     equalityExpression();
-    setState(142);
+    setState(177);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == CACTParser::AndAnd) {
-      setState(138);
-      antlrcpp::downCast<LogicalAndExpressionContext *>(_localctx)->op = match(CACTParser::AndAnd);
-      setState(139);
+      setState(172);
+      logicalAndOp();
+      setState(173);
       equalityExpression();
-      setState(144);
+      setState(179);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- LogicalAndOpContext ------------------------------------------------------------------
+
+CACTParser::LogicalAndOpContext::LogicalAndOpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* CACTParser::LogicalAndOpContext::AndAnd() {
+  return getToken(CACTParser::AndAnd, 0);
+}
+
+
+size_t CACTParser::LogicalAndOpContext::getRuleIndex() const {
+  return CACTParser::RuleLogicalAndOp;
+}
+
+
+std::any CACTParser::LogicalAndOpContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitLogicalAndOp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::LogicalAndOpContext* CACTParser::logicalAndOp() {
+  LogicalAndOpContext *_localctx = _tracker.createInstance<LogicalAndOpContext>(_ctx, getState());
+  enterRule(_localctx, 34, CACTParser::RuleLogicalAndOp);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(180);
+    match(CACTParser::AndAnd);
    
   }
   catch (RecognitionException &e) {
@@ -1207,12 +1576,12 @@ CACTParser::LogicalAndExpressionContext* CACTParser::LogicalOrExpressionContext:
   return getRuleContext<CACTParser::LogicalAndExpressionContext>(i);
 }
 
-std::vector<tree::TerminalNode *> CACTParser::LogicalOrExpressionContext::OrOr() {
-  return getTokens(CACTParser::OrOr);
+std::vector<CACTParser::LogicalOrOpContext *> CACTParser::LogicalOrExpressionContext::logicalOrOp() {
+  return getRuleContexts<CACTParser::LogicalOrOpContext>();
 }
 
-tree::TerminalNode* CACTParser::LogicalOrExpressionContext::OrOr(size_t i) {
-  return getToken(CACTParser::OrOr, i);
+CACTParser::LogicalOrOpContext* CACTParser::LogicalOrExpressionContext::logicalOrOp(size_t i) {
+  return getRuleContext<CACTParser::LogicalOrOpContext>(i);
 }
 
 
@@ -1230,7 +1599,7 @@ std::any CACTParser::LogicalOrExpressionContext::accept(tree::ParseTreeVisitor *
 
 CACTParser::LogicalOrExpressionContext* CACTParser::logicalOrExpression() {
   LogicalOrExpressionContext *_localctx = _tracker.createInstance<LogicalOrExpressionContext>(_ctx, getState());
-  enterRule(_localctx, 22, CACTParser::RuleLogicalOrExpression);
+  enterRule(_localctx, 36, CACTParser::RuleLogicalOrExpression);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1242,19 +1611,232 @@ CACTParser::LogicalOrExpressionContext* CACTParser::logicalOrExpression() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(145);
+    setState(182);
     logicalAndExpression();
-    setState(150);
+    setState(188);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == CACTParser::OrOr) {
-      setState(146);
-      antlrcpp::downCast<LogicalOrExpressionContext *>(_localctx)->op = match(CACTParser::OrOr);
-      setState(147);
+      setState(183);
+      logicalOrOp();
+      setState(184);
       logicalAndExpression();
-      setState(152);
+      setState(190);
       _errHandler->sync(this);
       _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- LogicalOrOpContext ------------------------------------------------------------------
+
+CACTParser::LogicalOrOpContext::LogicalOrOpContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* CACTParser::LogicalOrOpContext::OrOr() {
+  return getToken(CACTParser::OrOr, 0);
+}
+
+
+size_t CACTParser::LogicalOrOpContext::getRuleIndex() const {
+  return CACTParser::RuleLogicalOrOp;
+}
+
+
+std::any CACTParser::LogicalOrOpContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitLogicalOrOp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::LogicalOrOpContext* CACTParser::logicalOrOp() {
+  LogicalOrOpContext *_localctx = _tracker.createInstance<LogicalOrOpContext>(_ctx, getState());
+  enterRule(_localctx, 38, CACTParser::RuleLogicalOrOp);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(191);
+    match(CACTParser::OrOr);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ExpressionContext ------------------------------------------------------------------
+
+CACTParser::ExpressionContext::ExpressionContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+CACTParser::AdditiveExpressionContext* CACTParser::ExpressionContext::additiveExpression() {
+  return getRuleContext<CACTParser::AdditiveExpressionContext>(0);
+}
+
+tree::TerminalNode* CACTParser::ExpressionContext::BooleanConstant() {
+  return getToken(CACTParser::BooleanConstant, 0);
+}
+
+
+size_t CACTParser::ExpressionContext::getRuleIndex() const {
+  return CACTParser::RuleExpression;
+}
+
+
+std::any CACTParser::ExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::ExpressionContext* CACTParser::expression() {
+  ExpressionContext *_localctx = _tracker.createInstance<ExpressionContext>(_ctx, getState());
+  enterRule(_localctx, 40, CACTParser::RuleExpression);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(195);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case CACTParser::IntegerConstant:
+      case CACTParser::FloatingConstant:
+      case CACTParser::LeftParen:
+      case CACTParser::Plus:
+      case CACTParser::Minus:
+      case CACTParser::Not:
+      case CACTParser::Identifier: {
+        enterOuterAlt(_localctx, 1);
+        setState(193);
+        additiveExpression();
+        break;
+      }
+
+      case CACTParser::BooleanConstant: {
+        enterOuterAlt(_localctx, 2);
+        setState(194);
+        match(CACTParser::BooleanConstant);
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ConstantExpressionContext ------------------------------------------------------------------
+
+CACTParser::ConstantExpressionContext::ConstantExpressionContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+CACTParser::NumberContext* CACTParser::ConstantExpressionContext::number() {
+  return getRuleContext<CACTParser::NumberContext>(0);
+}
+
+CACTParser::AddOpContext* CACTParser::ConstantExpressionContext::addOp() {
+  return getRuleContext<CACTParser::AddOpContext>(0);
+}
+
+tree::TerminalNode* CACTParser::ConstantExpressionContext::BooleanConstant() {
+  return getToken(CACTParser::BooleanConstant, 0);
+}
+
+
+size_t CACTParser::ConstantExpressionContext::getRuleIndex() const {
+  return CACTParser::RuleConstantExpression;
+}
+
+
+std::any CACTParser::ConstantExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitConstantExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::ConstantExpressionContext* CACTParser::constantExpression() {
+  ConstantExpressionContext *_localctx = _tracker.createInstance<ConstantExpressionContext>(_ctx, getState());
+  enterRule(_localctx, 42, CACTParser::RuleConstantExpression);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(202);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case CACTParser::IntegerConstant:
+      case CACTParser::FloatingConstant:
+      case CACTParser::Plus:
+      case CACTParser::Minus: {
+        enterOuterAlt(_localctx, 1);
+        setState(198);
+        _errHandler->sync(this);
+
+        _la = _input->LA(1);
+        if (_la == CACTParser::Plus
+
+        || _la == CACTParser::Minus) {
+          setState(197);
+          addOp();
+        }
+        setState(200);
+        number();
+        break;
+      }
+
+      case CACTParser::BooleanConstant: {
+        enterOuterAlt(_localctx, 2);
+        setState(201);
+        match(CACTParser::BooleanConstant);
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
     }
    
   }
@@ -1292,7 +1874,7 @@ std::any CACTParser::ConditionContext::accept(tree::ParseTreeVisitor *visitor) {
 
 CACTParser::ConditionContext* CACTParser::condition() {
   ConditionContext *_localctx = _tracker.createInstance<ConditionContext>(_ctx, getState());
-  enterRule(_localctx, 24, CACTParser::RuleCondition);
+  enterRule(_localctx, 44, CACTParser::RuleCondition);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1303,244 +1885,8 @@ CACTParser::ConditionContext* CACTParser::condition() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(153);
+    setState(204);
     logicalOrExpression();
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- ConstantExpressionContext ------------------------------------------------------------------
-
-CACTParser::ConstantExpressionContext::ConstantExpressionContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-CACTParser::NumberContext* CACTParser::ConstantExpressionContext::number() {
-  return getRuleContext<CACTParser::NumberContext>(0);
-}
-
-tree::TerminalNode* CACTParser::ConstantExpressionContext::CharacterConstant() {
-  return getToken(CACTParser::CharacterConstant, 0);
-}
-
-
-size_t CACTParser::ConstantExpressionContext::getRuleIndex() const {
-  return CACTParser::RuleConstantExpression;
-}
-
-
-std::any CACTParser::ConstantExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
-    return parserVisitor->visitConstantExpression(this);
-  else
-    return visitor->visitChildren(this);
-}
-
-CACTParser::ConstantExpressionContext* CACTParser::constantExpression() {
-  ConstantExpressionContext *_localctx = _tracker.createInstance<ConstantExpressionContext>(_ctx, getState());
-  enterRule(_localctx, 26, CACTParser::RuleConstantExpression);
-
-#if __cplusplus > 201703L
-  auto onExit = finally([=, this] {
-#else
-  auto onExit = finally([=] {
-#endif
-    exitRule();
-  });
-  try {
-    setState(157);
-    _errHandler->sync(this);
-    switch (_input->LA(1)) {
-      case CACTParser::IntegerConstant:
-      case CACTParser::FloatingConstant: {
-        enterOuterAlt(_localctx, 1);
-        setState(155);
-        number();
-        break;
-      }
-
-      case CACTParser::CharacterConstant: {
-        enterOuterAlt(_localctx, 2);
-        setState(156);
-        match(CACTParser::CharacterConstant);
-        break;
-      }
-
-    default:
-      throw NoViableAltException(this);
-    }
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- ConstantInitValueContext ------------------------------------------------------------------
-
-CACTParser::ConstantInitValueContext::ConstantInitValueContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-CACTParser::ConstantExpressionContext* CACTParser::ConstantInitValueContext::constantExpression() {
-  return getRuleContext<CACTParser::ConstantExpressionContext>(0);
-}
-
-tree::TerminalNode* CACTParser::ConstantInitValueContext::LeftBrace() {
-  return getToken(CACTParser::LeftBrace, 0);
-}
-
-tree::TerminalNode* CACTParser::ConstantInitValueContext::RightBrace() {
-  return getToken(CACTParser::RightBrace, 0);
-}
-
-std::vector<CACTParser::ConstantInitValueContext *> CACTParser::ConstantInitValueContext::constantInitValue() {
-  return getRuleContexts<CACTParser::ConstantInitValueContext>();
-}
-
-CACTParser::ConstantInitValueContext* CACTParser::ConstantInitValueContext::constantInitValue(size_t i) {
-  return getRuleContext<CACTParser::ConstantInitValueContext>(i);
-}
-
-std::vector<tree::TerminalNode *> CACTParser::ConstantInitValueContext::Comma() {
-  return getTokens(CACTParser::Comma);
-}
-
-tree::TerminalNode* CACTParser::ConstantInitValueContext::Comma(size_t i) {
-  return getToken(CACTParser::Comma, i);
-}
-
-
-size_t CACTParser::ConstantInitValueContext::getRuleIndex() const {
-  return CACTParser::RuleConstantInitValue;
-}
-
-
-std::any CACTParser::ConstantInitValueContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
-    return parserVisitor->visitConstantInitValue(this);
-  else
-    return visitor->visitChildren(this);
-}
-
-CACTParser::ConstantInitValueContext* CACTParser::constantInitValue() {
-  ConstantInitValueContext *_localctx = _tracker.createInstance<ConstantInitValueContext>(_ctx, getState());
-  enterRule(_localctx, 28, CACTParser::RuleConstantInitValue);
-  size_t _la = 0;
-
-#if __cplusplus > 201703L
-  auto onExit = finally([=, this] {
-#else
-  auto onExit = finally([=] {
-#endif
-    exitRule();
-  });
-  try {
-    setState(172);
-    _errHandler->sync(this);
-    switch (_input->LA(1)) {
-      case CACTParser::IntegerConstant:
-      case CACTParser::FloatingConstant:
-      case CACTParser::CharacterConstant: {
-        enterOuterAlt(_localctx, 1);
-        setState(159);
-        constantExpression();
-        break;
-      }
-
-      case CACTParser::LeftBrace: {
-        enterOuterAlt(_localctx, 2);
-        setState(160);
-        match(CACTParser::LeftBrace);
-        setState(169);
-        _errHandler->sync(this);
-
-        _la = _input->LA(1);
-        if ((((_la & ~ 0x3fULL) == 0) &&
-          ((1ULL << _la) & 67109088) != 0)) {
-          setState(161);
-          constantInitValue();
-          setState(166);
-          _errHandler->sync(this);
-          _la = _input->LA(1);
-          while (_la == CACTParser::Comma) {
-            setState(162);
-            match(CACTParser::Comma);
-            setState(163);
-            constantInitValue();
-            setState(168);
-            _errHandler->sync(this);
-            _la = _input->LA(1);
-          }
-        }
-        setState(171);
-        match(CACTParser::RightBrace);
-        break;
-      }
-
-    default:
-      throw NoViableAltException(this);
-    }
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- ExpressionContext ------------------------------------------------------------------
-
-CACTParser::ExpressionContext::ExpressionContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-CACTParser::AdditiveExpressionContext* CACTParser::ExpressionContext::additiveExpression() {
-  return getRuleContext<CACTParser::AdditiveExpressionContext>(0);
-}
-
-
-size_t CACTParser::ExpressionContext::getRuleIndex() const {
-  return CACTParser::RuleExpression;
-}
-
-
-std::any CACTParser::ExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
-    return parserVisitor->visitExpression(this);
-  else
-    return visitor->visitChildren(this);
-}
-
-CACTParser::ExpressionContext* CACTParser::expression() {
-  ExpressionContext *_localctx = _tracker.createInstance<ExpressionContext>(_ctx, getState());
-  enterRule(_localctx, 30, CACTParser::RuleExpression);
-
-#if __cplusplus > 201703L
-  auto onExit = finally([=, this] {
-#else
-  auto onExit = finally([=] {
-#endif
-    exitRule();
-  });
-  try {
-    enterOuterAlt(_localctx, 1);
-    setState(174);
-    additiveExpression();
    
   }
   catch (RecognitionException &e) {
@@ -1581,7 +1927,7 @@ std::any CACTParser::DeclarationContext::accept(tree::ParseTreeVisitor *visitor)
 
 CACTParser::DeclarationContext* CACTParser::declaration() {
   DeclarationContext *_localctx = _tracker.createInstance<DeclarationContext>(_ctx, getState());
-  enterRule(_localctx, 32, CACTParser::RuleDeclaration);
+  enterRule(_localctx, 46, CACTParser::RuleDeclaration);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1591,22 +1937,22 @@ CACTParser::DeclarationContext* CACTParser::declaration() {
     exitRule();
   });
   try {
-    setState(178);
+    setState(208);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case CACTParser::Const: {
         enterOuterAlt(_localctx, 1);
-        setState(176);
+        setState(206);
         constantDeclaration();
         break;
       }
 
-      case CACTParser::Int:
-      case CACTParser::Char:
+      case CACTParser::Bool:
+      case CACTParser::Double:
       case CACTParser::Float:
-      case CACTParser::Double: {
+      case CACTParser::Int: {
         enterOuterAlt(_localctx, 2);
-        setState(177);
+        setState(207);
         variableDeclaration();
         break;
       }
@@ -1647,8 +1993,8 @@ CACTParser::ConstantDefinitionContext* CACTParser::ConstantDeclarationContext::c
   return getRuleContext<CACTParser::ConstantDefinitionContext>(i);
 }
 
-tree::TerminalNode* CACTParser::ConstantDeclarationContext::Semicolon() {
-  return getToken(CACTParser::Semicolon, 0);
+tree::TerminalNode* CACTParser::ConstantDeclarationContext::Semi() {
+  return getToken(CACTParser::Semi, 0);
 }
 
 std::vector<tree::TerminalNode *> CACTParser::ConstantDeclarationContext::Comma() {
@@ -1674,7 +2020,7 @@ std::any CACTParser::ConstantDeclarationContext::accept(tree::ParseTreeVisitor *
 
 CACTParser::ConstantDeclarationContext* CACTParser::constantDeclaration() {
   ConstantDeclarationContext *_localctx = _tracker.createInstance<ConstantDeclarationContext>(_ctx, getState());
-  enterRule(_localctx, 34, CACTParser::RuleConstantDeclaration);
+  enterRule(_localctx, 48, CACTParser::RuleConstantDeclaration);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1686,26 +2032,26 @@ CACTParser::ConstantDeclarationContext* CACTParser::constantDeclaration() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(180);
+    setState(210);
     match(CACTParser::Const);
-    setState(181);
+    setState(211);
     basicType();
-    setState(182);
+    setState(212);
     constantDefinition();
-    setState(187);
+    setState(217);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == CACTParser::Comma) {
-      setState(183);
+      setState(213);
       match(CACTParser::Comma);
-      setState(184);
+      setState(214);
       constantDefinition();
-      setState(189);
+      setState(219);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(190);
-    match(CACTParser::Semicolon);
+    setState(220);
+    match(CACTParser::Semi);
    
   }
   catch (RecognitionException &e) {
@@ -1774,7 +2120,7 @@ std::any CACTParser::ConstantDefinitionContext::accept(tree::ParseTreeVisitor *v
 
 CACTParser::ConstantDefinitionContext* CACTParser::constantDefinition() {
   ConstantDefinitionContext *_localctx = _tracker.createInstance<ConstantDefinitionContext>(_ctx, getState());
-  enterRule(_localctx, 36, CACTParser::RuleConstantDefinition);
+  enterRule(_localctx, 50, CACTParser::RuleConstantDefinition);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1786,26 +2132,144 @@ CACTParser::ConstantDefinitionContext* CACTParser::constantDefinition() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(192);
+    setState(222);
     match(CACTParser::Identifier);
-    setState(198);
+    setState(228);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == CACTParser::LeftBracket) {
-      setState(193);
+      setState(223);
       match(CACTParser::LeftBracket);
-      setState(194);
+      setState(224);
       match(CACTParser::IntegerConstant);
-      setState(195);
+      setState(225);
       match(CACTParser::RightBracket);
-      setState(200);
+      setState(230);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(201);
+    setState(231);
     match(CACTParser::Assign);
-    setState(202);
+    setState(232);
     constantInitValue();
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ConstantInitValueContext ------------------------------------------------------------------
+
+CACTParser::ConstantInitValueContext::ConstantInitValueContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+CACTParser::ConstantExpressionContext* CACTParser::ConstantInitValueContext::constantExpression() {
+  return getRuleContext<CACTParser::ConstantExpressionContext>(0);
+}
+
+tree::TerminalNode* CACTParser::ConstantInitValueContext::LeftBrace() {
+  return getToken(CACTParser::LeftBrace, 0);
+}
+
+tree::TerminalNode* CACTParser::ConstantInitValueContext::RightBrace() {
+  return getToken(CACTParser::RightBrace, 0);
+}
+
+std::vector<CACTParser::ConstantInitValueContext *> CACTParser::ConstantInitValueContext::constantInitValue() {
+  return getRuleContexts<CACTParser::ConstantInitValueContext>();
+}
+
+CACTParser::ConstantInitValueContext* CACTParser::ConstantInitValueContext::constantInitValue(size_t i) {
+  return getRuleContext<CACTParser::ConstantInitValueContext>(i);
+}
+
+std::vector<tree::TerminalNode *> CACTParser::ConstantInitValueContext::Comma() {
+  return getTokens(CACTParser::Comma);
+}
+
+tree::TerminalNode* CACTParser::ConstantInitValueContext::Comma(size_t i) {
+  return getToken(CACTParser::Comma, i);
+}
+
+
+size_t CACTParser::ConstantInitValueContext::getRuleIndex() const {
+  return CACTParser::RuleConstantInitValue;
+}
+
+
+std::any CACTParser::ConstantInitValueContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitConstantInitValue(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::ConstantInitValueContext* CACTParser::constantInitValue() {
+  ConstantInitValueContext *_localctx = _tracker.createInstance<ConstantInitValueContext>(_ctx, getState());
+  enterRule(_localctx, 52, CACTParser::RuleConstantInitValue);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(247);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case CACTParser::IntegerConstant:
+      case CACTParser::FloatingConstant:
+      case CACTParser::BooleanConstant:
+      case CACTParser::Plus:
+      case CACTParser::Minus: {
+        enterOuterAlt(_localctx, 1);
+        setState(234);
+        constantExpression();
+        break;
+      }
+
+      case CACTParser::LeftBrace: {
+        enterOuterAlt(_localctx, 2);
+        setState(235);
+        match(CACTParser::LeftBrace);
+        setState(244);
+        _errHandler->sync(this);
+
+        _la = _input->LA(1);
+        if ((((_la & ~ 0x3fULL) == 0) &&
+          ((1ULL << _la) & 809500686) != 0)) {
+          setState(236);
+          constantInitValue();
+          setState(241);
+          _errHandler->sync(this);
+          _la = _input->LA(1);
+          while (_la == CACTParser::Comma) {
+            setState(237);
+            match(CACTParser::Comma);
+            setState(238);
+            constantInitValue();
+            setState(243);
+            _errHandler->sync(this);
+            _la = _input->LA(1);
+          }
+        }
+        setState(246);
+        match(CACTParser::RightBrace);
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
    
   }
   catch (RecognitionException &e) {
@@ -1835,8 +2299,8 @@ CACTParser::VariableDefinitionContext* CACTParser::VariableDeclarationContext::v
   return getRuleContext<CACTParser::VariableDefinitionContext>(i);
 }
 
-tree::TerminalNode* CACTParser::VariableDeclarationContext::Semicolon() {
-  return getToken(CACTParser::Semicolon, 0);
+tree::TerminalNode* CACTParser::VariableDeclarationContext::Semi() {
+  return getToken(CACTParser::Semi, 0);
 }
 
 std::vector<tree::TerminalNode *> CACTParser::VariableDeclarationContext::Comma() {
@@ -1862,7 +2326,7 @@ std::any CACTParser::VariableDeclarationContext::accept(tree::ParseTreeVisitor *
 
 CACTParser::VariableDeclarationContext* CACTParser::variableDeclaration() {
   VariableDeclarationContext *_localctx = _tracker.createInstance<VariableDeclarationContext>(_ctx, getState());
-  enterRule(_localctx, 38, CACTParser::RuleVariableDeclaration);
+  enterRule(_localctx, 54, CACTParser::RuleVariableDeclaration);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1874,24 +2338,24 @@ CACTParser::VariableDeclarationContext* CACTParser::variableDeclaration() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(204);
+    setState(249);
     basicType();
-    setState(205);
+    setState(250);
     variableDefinition();
-    setState(210);
+    setState(255);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == CACTParser::Comma) {
-      setState(206);
+      setState(251);
       match(CACTParser::Comma);
-      setState(207);
+      setState(252);
       variableDefinition();
-      setState(212);
+      setState(257);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(213);
-    match(CACTParser::Semicolon);
+    setState(258);
+    match(CACTParser::Semi);
    
   }
   catch (RecognitionException &e) {
@@ -1960,7 +2424,7 @@ std::any CACTParser::VariableDefinitionContext::accept(tree::ParseTreeVisitor *v
 
 CACTParser::VariableDefinitionContext* CACTParser::variableDefinition() {
   VariableDefinitionContext *_localctx = _tracker.createInstance<VariableDefinitionContext>(_ctx, getState());
-  enterRule(_localctx, 40, CACTParser::RuleVariableDefinition);
+  enterRule(_localctx, 56, CACTParser::RuleVariableDefinition);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1972,30 +2436,30 @@ CACTParser::VariableDefinitionContext* CACTParser::variableDefinition() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(215);
+    setState(260);
     match(CACTParser::Identifier);
-    setState(221);
+    setState(266);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == CACTParser::LeftBracket) {
-      setState(216);
+      setState(261);
       match(CACTParser::LeftBracket);
-      setState(217);
+      setState(262);
       match(CACTParser::IntegerConstant);
-      setState(218);
+      setState(263);
       match(CACTParser::RightBracket);
-      setState(223);
+      setState(268);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(226);
+    setState(271);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == CACTParser::Assign) {
-      setState(224);
+      setState(269);
       match(CACTParser::Assign);
-      setState(225);
+      setState(270);
       constantInitValue();
     }
    
@@ -2050,7 +2514,7 @@ std::any CACTParser::StatementContext::accept(tree::ParseTreeVisitor *visitor) {
 
 CACTParser::StatementContext* CACTParser::statement() {
   StatementContext *_localctx = _tracker.createInstance<StatementContext>(_ctx, getState());
-  enterRule(_localctx, 42, CACTParser::RuleStatement);
+  enterRule(_localctx, 58, CACTParser::RuleStatement);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -2060,50 +2524,50 @@ CACTParser::StatementContext* CACTParser::statement() {
     exitRule();
   });
   try {
-    setState(233);
+    setState(278);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case CACTParser::LeftBrace: {
         enterOuterAlt(_localctx, 1);
-        setState(228);
+        setState(273);
         compoundStatement();
         break;
       }
 
       case CACTParser::IntegerConstant:
       case CACTParser::FloatingConstant:
-      case CACTParser::CharacterConstant:
-      case CACTParser::LeftParenthesis:
+      case CACTParser::BooleanConstant:
+      case CACTParser::LeftParen:
       case CACTParser::Plus:
       case CACTParser::Minus:
       case CACTParser::Not:
-      case CACTParser::Semicolon:
+      case CACTParser::Semi:
       case CACTParser::Identifier: {
         enterOuterAlt(_localctx, 2);
-        setState(229);
+        setState(274);
         expressionStatement();
         break;
       }
 
       case CACTParser::If: {
         enterOuterAlt(_localctx, 3);
-        setState(230);
+        setState(275);
         selectionStatement();
         break;
       }
 
       case CACTParser::While: {
         enterOuterAlt(_localctx, 4);
-        setState(231);
+        setState(276);
         iterationStatement();
         break;
       }
 
-      case CACTParser::Continue:
       case CACTParser::Break:
+      case CACTParser::Continue:
       case CACTParser::Return: {
         enterOuterAlt(_localctx, 5);
-        setState(232);
+        setState(277);
         jumpStatement();
         break;
       }
@@ -2155,7 +2619,7 @@ std::any CACTParser::CompoundStatementContext::accept(tree::ParseTreeVisitor *vi
 
 CACTParser::CompoundStatementContext* CACTParser::compoundStatement() {
   CompoundStatementContext *_localctx = _tracker.createInstance<CompoundStatementContext>(_ctx, getState());
-  enterRule(_localctx, 44, CACTParser::RuleCompoundStatement);
+  enterRule(_localctx, 60, CACTParser::RuleCompoundStatement);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -2167,469 +2631,19 @@ CACTParser::CompoundStatementContext* CACTParser::compoundStatement() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(235);
+    setState(280);
     match(CACTParser::LeftBrace);
-    setState(237);
+    setState(282);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 72030971908064) != 0)) {
-      setState(236);
+      ((1ULL << _la) & 4501935651326) != 0)) {
+      setState(281);
       blockItemList();
     }
-    setState(239);
+    setState(284);
     match(CACTParser::RightBrace);
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- ExpressionStatementContext ------------------------------------------------------------------
-
-CACTParser::ExpressionStatementContext::ExpressionStatementContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-tree::TerminalNode* CACTParser::ExpressionStatementContext::Semicolon() {
-  return getToken(CACTParser::Semicolon, 0);
-}
-
-CACTParser::ExpressionContext* CACTParser::ExpressionStatementContext::expression() {
-  return getRuleContext<CACTParser::ExpressionContext>(0);
-}
-
-CACTParser::LeftValueContext* CACTParser::ExpressionStatementContext::leftValue() {
-  return getRuleContext<CACTParser::LeftValueContext>(0);
-}
-
-tree::TerminalNode* CACTParser::ExpressionStatementContext::Assign() {
-  return getToken(CACTParser::Assign, 0);
-}
-
-
-size_t CACTParser::ExpressionStatementContext::getRuleIndex() const {
-  return CACTParser::RuleExpressionStatement;
-}
-
-
-std::any CACTParser::ExpressionStatementContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
-    return parserVisitor->visitExpressionStatement(this);
-  else
-    return visitor->visitChildren(this);
-}
-
-CACTParser::ExpressionStatementContext* CACTParser::expressionStatement() {
-  ExpressionStatementContext *_localctx = _tracker.createInstance<ExpressionStatementContext>(_ctx, getState());
-  enterRule(_localctx, 46, CACTParser::RuleExpressionStatement);
-  size_t _la = 0;
-
-#if __cplusplus > 201703L
-  auto onExit = finally([=, this] {
-#else
-  auto onExit = finally([=] {
-#endif
-    exitRule();
-  });
-  try {
-    setState(250);
-    _errHandler->sync(this);
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 24, _ctx)) {
-    case 1: {
-      enterOuterAlt(_localctx, 1);
-      setState(242);
-      _errHandler->sync(this);
-
-      _la = _input->LA(1);
-      if ((((_la & ~ 0x3fULL) == 0) &&
-        ((1ULL << _la) & 70931389087968) != 0)) {
-        setState(241);
-        expression();
-      }
-      setState(244);
-      match(CACTParser::Semicolon);
-      break;
-    }
-
-    case 2: {
-      enterOuterAlt(_localctx, 2);
-      setState(245);
-      leftValue();
-      setState(246);
-      match(CACTParser::Assign);
-      setState(247);
-      expression();
-      setState(248);
-      match(CACTParser::Semicolon);
-      break;
-    }
-
-    default:
-      break;
-    }
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- SelectionStatementContext ------------------------------------------------------------------
-
-CACTParser::SelectionStatementContext::SelectionStatementContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-tree::TerminalNode* CACTParser::SelectionStatementContext::If() {
-  return getToken(CACTParser::If, 0);
-}
-
-tree::TerminalNode* CACTParser::SelectionStatementContext::LeftParenthesis() {
-  return getToken(CACTParser::LeftParenthesis, 0);
-}
-
-CACTParser::ExpressionContext* CACTParser::SelectionStatementContext::expression() {
-  return getRuleContext<CACTParser::ExpressionContext>(0);
-}
-
-tree::TerminalNode* CACTParser::SelectionStatementContext::RightParenthesis() {
-  return getToken(CACTParser::RightParenthesis, 0);
-}
-
-std::vector<CACTParser::StatementContext *> CACTParser::SelectionStatementContext::statement() {
-  return getRuleContexts<CACTParser::StatementContext>();
-}
-
-CACTParser::StatementContext* CACTParser::SelectionStatementContext::statement(size_t i) {
-  return getRuleContext<CACTParser::StatementContext>(i);
-}
-
-tree::TerminalNode* CACTParser::SelectionStatementContext::Else() {
-  return getToken(CACTParser::Else, 0);
-}
-
-
-size_t CACTParser::SelectionStatementContext::getRuleIndex() const {
-  return CACTParser::RuleSelectionStatement;
-}
-
-
-std::any CACTParser::SelectionStatementContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
-    return parserVisitor->visitSelectionStatement(this);
-  else
-    return visitor->visitChildren(this);
-}
-
-CACTParser::SelectionStatementContext* CACTParser::selectionStatement() {
-  SelectionStatementContext *_localctx = _tracker.createInstance<SelectionStatementContext>(_ctx, getState());
-  enterRule(_localctx, 48, CACTParser::RuleSelectionStatement);
-
-#if __cplusplus > 201703L
-  auto onExit = finally([=, this] {
-#else
-  auto onExit = finally([=] {
-#endif
-    exitRule();
-  });
-  try {
-    enterOuterAlt(_localctx, 1);
-    setState(252);
-    match(CACTParser::If);
-    setState(253);
-    match(CACTParser::LeftParenthesis);
-    setState(254);
-    expression();
-    setState(255);
-    match(CACTParser::RightParenthesis);
-    setState(256);
-    statement();
-    setState(259);
-    _errHandler->sync(this);
-
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 25, _ctx)) {
-    case 1: {
-      setState(257);
-      match(CACTParser::Else);
-      setState(258);
-      statement();
-      break;
-    }
-
-    default:
-      break;
-    }
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- IterationStatementContext ------------------------------------------------------------------
-
-CACTParser::IterationStatementContext::IterationStatementContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-tree::TerminalNode* CACTParser::IterationStatementContext::While() {
-  return getToken(CACTParser::While, 0);
-}
-
-tree::TerminalNode* CACTParser::IterationStatementContext::LeftParenthesis() {
-  return getToken(CACTParser::LeftParenthesis, 0);
-}
-
-CACTParser::ExpressionContext* CACTParser::IterationStatementContext::expression() {
-  return getRuleContext<CACTParser::ExpressionContext>(0);
-}
-
-tree::TerminalNode* CACTParser::IterationStatementContext::RightParenthesis() {
-  return getToken(CACTParser::RightParenthesis, 0);
-}
-
-CACTParser::StatementContext* CACTParser::IterationStatementContext::statement() {
-  return getRuleContext<CACTParser::StatementContext>(0);
-}
-
-
-size_t CACTParser::IterationStatementContext::getRuleIndex() const {
-  return CACTParser::RuleIterationStatement;
-}
-
-
-std::any CACTParser::IterationStatementContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
-    return parserVisitor->visitIterationStatement(this);
-  else
-    return visitor->visitChildren(this);
-}
-
-CACTParser::IterationStatementContext* CACTParser::iterationStatement() {
-  IterationStatementContext *_localctx = _tracker.createInstance<IterationStatementContext>(_ctx, getState());
-  enterRule(_localctx, 50, CACTParser::RuleIterationStatement);
-
-#if __cplusplus > 201703L
-  auto onExit = finally([=, this] {
-#else
-  auto onExit = finally([=] {
-#endif
-    exitRule();
-  });
-  try {
-    enterOuterAlt(_localctx, 1);
-    setState(261);
-    match(CACTParser::While);
-    setState(262);
-    match(CACTParser::LeftParenthesis);
-    setState(263);
-    expression();
-    setState(264);
-    match(CACTParser::RightParenthesis);
-    setState(265);
-    statement();
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- JumpStatementContext ------------------------------------------------------------------
-
-CACTParser::JumpStatementContext::JumpStatementContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-tree::TerminalNode* CACTParser::JumpStatementContext::Semicolon() {
-  return getToken(CACTParser::Semicolon, 0);
-}
-
-tree::TerminalNode* CACTParser::JumpStatementContext::Continue() {
-  return getToken(CACTParser::Continue, 0);
-}
-
-tree::TerminalNode* CACTParser::JumpStatementContext::Break() {
-  return getToken(CACTParser::Break, 0);
-}
-
-tree::TerminalNode* CACTParser::JumpStatementContext::Return() {
-  return getToken(CACTParser::Return, 0);
-}
-
-CACTParser::ExpressionContext* CACTParser::JumpStatementContext::expression() {
-  return getRuleContext<CACTParser::ExpressionContext>(0);
-}
-
-
-size_t CACTParser::JumpStatementContext::getRuleIndex() const {
-  return CACTParser::RuleJumpStatement;
-}
-
-
-std::any CACTParser::JumpStatementContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
-    return parserVisitor->visitJumpStatement(this);
-  else
-    return visitor->visitChildren(this);
-}
-
-CACTParser::JumpStatementContext* CACTParser::jumpStatement() {
-  JumpStatementContext *_localctx = _tracker.createInstance<JumpStatementContext>(_ctx, getState());
-  enterRule(_localctx, 52, CACTParser::RuleJumpStatement);
-  size_t _la = 0;
-
-#if __cplusplus > 201703L
-  auto onExit = finally([=, this] {
-#else
-  auto onExit = finally([=] {
-#endif
-    exitRule();
-  });
-  try {
-    enterOuterAlt(_localctx, 1);
-    setState(273);
-    _errHandler->sync(this);
-    switch (_input->LA(1)) {
-      case CACTParser::Continue: {
-        setState(267);
-        match(CACTParser::Continue);
-        break;
-      }
-
-      case CACTParser::Break: {
-        setState(268);
-        match(CACTParser::Break);
-        break;
-      }
-
-      case CACTParser::Return: {
-        setState(269);
-        match(CACTParser::Return);
-        setState(271);
-        _errHandler->sync(this);
-
-        _la = _input->LA(1);
-        if ((((_la & ~ 0x3fULL) == 0) &&
-          ((1ULL << _la) & 70931389087968) != 0)) {
-          setState(270);
-          expression();
-        }
-        break;
-      }
-
-    default:
-      throw NoViableAltException(this);
-    }
-    setState(275);
-    match(CACTParser::Semicolon);
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- BlockItemContext ------------------------------------------------------------------
-
-CACTParser::BlockItemContext::BlockItemContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-CACTParser::StatementContext* CACTParser::BlockItemContext::statement() {
-  return getRuleContext<CACTParser::StatementContext>(0);
-}
-
-CACTParser::DeclarationContext* CACTParser::BlockItemContext::declaration() {
-  return getRuleContext<CACTParser::DeclarationContext>(0);
-}
-
-
-size_t CACTParser::BlockItemContext::getRuleIndex() const {
-  return CACTParser::RuleBlockItem;
-}
-
-
-std::any CACTParser::BlockItemContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
-    return parserVisitor->visitBlockItem(this);
-  else
-    return visitor->visitChildren(this);
-}
-
-CACTParser::BlockItemContext* CACTParser::blockItem() {
-  BlockItemContext *_localctx = _tracker.createInstance<BlockItemContext>(_ctx, getState());
-  enterRule(_localctx, 54, CACTParser::RuleBlockItem);
-
-#if __cplusplus > 201703L
-  auto onExit = finally([=, this] {
-#else
-  auto onExit = finally([=] {
-#endif
-    exitRule();
-  });
-  try {
-    setState(279);
-    _errHandler->sync(this);
-    switch (_input->LA(1)) {
-      case CACTParser::IntegerConstant:
-      case CACTParser::FloatingConstant:
-      case CACTParser::CharacterConstant:
-      case CACTParser::Continue:
-      case CACTParser::While:
-      case CACTParser::Break:
-      case CACTParser::If:
-      case CACTParser::Return:
-      case CACTParser::LeftParenthesis:
-      case CACTParser::LeftBrace:
-      case CACTParser::Plus:
-      case CACTParser::Minus:
-      case CACTParser::Not:
-      case CACTParser::Semicolon:
-      case CACTParser::Identifier: {
-        enterOuterAlt(_localctx, 1);
-        setState(277);
-        statement();
-        break;
-      }
-
-      case CACTParser::Const:
-      case CACTParser::Int:
-      case CACTParser::Char:
-      case CACTParser::Float:
-      case CACTParser::Double: {
-        enterOuterAlt(_localctx, 2);
-        setState(278);
-        declaration();
-        break;
-      }
-
-    default:
-      throw NoViableAltException(this);
-    }
    
   }
   catch (RecognitionException &e) {
@@ -2670,7 +2684,7 @@ std::any CACTParser::BlockItemListContext::accept(tree::ParseTreeVisitor *visito
 
 CACTParser::BlockItemListContext* CACTParser::blockItemList() {
   BlockItemListContext *_localctx = _tracker.createInstance<BlockItemListContext>(_ctx, getState());
-  enterRule(_localctx, 56, CACTParser::RuleBlockItemList);
+  enterRule(_localctx, 62, CACTParser::RuleBlockItemList);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -2682,17 +2696,17 @@ CACTParser::BlockItemListContext* CACTParser::blockItemList() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(282); 
+    setState(287); 
     _errHandler->sync(this);
     _la = _input->LA(1);
     do {
-      setState(281);
+      setState(286);
       blockItem();
-      setState(284); 
+      setState(289); 
       _errHandler->sync(this);
       _la = _input->LA(1);
     } while ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 72030971908064) != 0));
+      ((1ULL << _la) & 4501935651326) != 0));
    
   }
   catch (RecognitionException &e) {
@@ -2704,56 +2718,238 @@ CACTParser::BlockItemListContext* CACTParser::blockItemList() {
   return _localctx;
 }
 
-//----------------- LeftValueContext ------------------------------------------------------------------
+//----------------- BlockItemContext ------------------------------------------------------------------
 
-CACTParser::LeftValueContext::LeftValueContext(ParserRuleContext *parent, size_t invokingState)
+CACTParser::BlockItemContext::BlockItemContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* CACTParser::LeftValueContext::Identifier() {
+CACTParser::StatementContext* CACTParser::BlockItemContext::statement() {
+  return getRuleContext<CACTParser::StatementContext>(0);
+}
+
+CACTParser::DeclarationContext* CACTParser::BlockItemContext::declaration() {
+  return getRuleContext<CACTParser::DeclarationContext>(0);
+}
+
+
+size_t CACTParser::BlockItemContext::getRuleIndex() const {
+  return CACTParser::RuleBlockItem;
+}
+
+
+std::any CACTParser::BlockItemContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitBlockItem(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::BlockItemContext* CACTParser::blockItem() {
+  BlockItemContext *_localctx = _tracker.createInstance<BlockItemContext>(_ctx, getState());
+  enterRule(_localctx, 64, CACTParser::RuleBlockItem);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(293);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case CACTParser::IntegerConstant:
+      case CACTParser::FloatingConstant:
+      case CACTParser::BooleanConstant:
+      case CACTParser::Break:
+      case CACTParser::Continue:
+      case CACTParser::If:
+      case CACTParser::Return:
+      case CACTParser::While:
+      case CACTParser::LeftParen:
+      case CACTParser::LeftBrace:
+      case CACTParser::Plus:
+      case CACTParser::Minus:
+      case CACTParser::Not:
+      case CACTParser::Semi:
+      case CACTParser::Identifier: {
+        enterOuterAlt(_localctx, 1);
+        setState(291);
+        statement();
+        break;
+      }
+
+      case CACTParser::Bool:
+      case CACTParser::Const:
+      case CACTParser::Double:
+      case CACTParser::Float:
+      case CACTParser::Int: {
+        enterOuterAlt(_localctx, 2);
+        setState(292);
+        declaration();
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ExpressionStatementContext ------------------------------------------------------------------
+
+CACTParser::ExpressionStatementContext::ExpressionStatementContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* CACTParser::ExpressionStatementContext::Semi() {
+  return getToken(CACTParser::Semi, 0);
+}
+
+CACTParser::ExpressionContext* CACTParser::ExpressionStatementContext::expression() {
+  return getRuleContext<CACTParser::ExpressionContext>(0);
+}
+
+CACTParser::LValueContext* CACTParser::ExpressionStatementContext::lValue() {
+  return getRuleContext<CACTParser::LValueContext>(0);
+}
+
+tree::TerminalNode* CACTParser::ExpressionStatementContext::Assign() {
+  return getToken(CACTParser::Assign, 0);
+}
+
+
+size_t CACTParser::ExpressionStatementContext::getRuleIndex() const {
+  return CACTParser::RuleExpressionStatement;
+}
+
+
+std::any CACTParser::ExpressionStatementContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitExpressionStatement(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::ExpressionStatementContext* CACTParser::expressionStatement() {
+  ExpressionStatementContext *_localctx = _tracker.createInstance<ExpressionStatementContext>(_ctx, getState());
+  enterRule(_localctx, 66, CACTParser::RuleExpressionStatement);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    setState(304);
+    _errHandler->sync(this);
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 30, _ctx)) {
+    case 1: {
+      enterOuterAlt(_localctx, 1);
+      setState(296);
+      _errHandler->sync(this);
+
+      _la = _input->LA(1);
+      if ((((_la & ~ 0x3fULL) == 0) &&
+        ((1ULL << _la) & 4433211817998) != 0)) {
+        setState(295);
+        expression();
+      }
+      setState(298);
+      match(CACTParser::Semi);
+      break;
+    }
+
+    case 2: {
+      enterOuterAlt(_localctx, 2);
+      setState(299);
+      lValue();
+      setState(300);
+      match(CACTParser::Assign);
+      setState(301);
+      expression();
+      setState(302);
+      match(CACTParser::Semi);
+      break;
+    }
+
+    default:
+      break;
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- LValueContext ------------------------------------------------------------------
+
+CACTParser::LValueContext::LValueContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* CACTParser::LValueContext::Identifier() {
   return getToken(CACTParser::Identifier, 0);
 }
 
-std::vector<tree::TerminalNode *> CACTParser::LeftValueContext::LeftBracket() {
+std::vector<tree::TerminalNode *> CACTParser::LValueContext::LeftBracket() {
   return getTokens(CACTParser::LeftBracket);
 }
 
-tree::TerminalNode* CACTParser::LeftValueContext::LeftBracket(size_t i) {
+tree::TerminalNode* CACTParser::LValueContext::LeftBracket(size_t i) {
   return getToken(CACTParser::LeftBracket, i);
 }
 
-std::vector<CACTParser::ExpressionContext *> CACTParser::LeftValueContext::expression() {
+std::vector<CACTParser::ExpressionContext *> CACTParser::LValueContext::expression() {
   return getRuleContexts<CACTParser::ExpressionContext>();
 }
 
-CACTParser::ExpressionContext* CACTParser::LeftValueContext::expression(size_t i) {
+CACTParser::ExpressionContext* CACTParser::LValueContext::expression(size_t i) {
   return getRuleContext<CACTParser::ExpressionContext>(i);
 }
 
-std::vector<tree::TerminalNode *> CACTParser::LeftValueContext::RightBracket() {
+std::vector<tree::TerminalNode *> CACTParser::LValueContext::RightBracket() {
   return getTokens(CACTParser::RightBracket);
 }
 
-tree::TerminalNode* CACTParser::LeftValueContext::RightBracket(size_t i) {
+tree::TerminalNode* CACTParser::LValueContext::RightBracket(size_t i) {
   return getToken(CACTParser::RightBracket, i);
 }
 
 
-size_t CACTParser::LeftValueContext::getRuleIndex() const {
-  return CACTParser::RuleLeftValue;
+size_t CACTParser::LValueContext::getRuleIndex() const {
+  return CACTParser::RuleLValue;
 }
 
 
-std::any CACTParser::LeftValueContext::accept(tree::ParseTreeVisitor *visitor) {
+std::any CACTParser::LValueContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
-    return parserVisitor->visitLeftValue(this);
+    return parserVisitor->visitLValue(this);
   else
     return visitor->visitChildren(this);
 }
 
-CACTParser::LeftValueContext* CACTParser::leftValue() {
-  LeftValueContext *_localctx = _tracker.createInstance<LeftValueContext>(_ctx, getState());
-  enterRule(_localctx, 58, CACTParser::RuleLeftValue);
+CACTParser::LValueContext* CACTParser::lValue() {
+  LValueContext *_localctx = _tracker.createInstance<LValueContext>(_ctx, getState());
+  enterRule(_localctx, 68, CACTParser::RuleLValue);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -2765,19 +2961,19 @@ CACTParser::LeftValueContext* CACTParser::leftValue() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(286);
+    setState(306);
     match(CACTParser::Identifier);
-    setState(293);
+    setState(313);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == CACTParser::LeftBracket) {
-      setState(287);
+      setState(307);
       match(CACTParser::LeftBracket);
-      setState(288);
+      setState(308);
       expression();
-      setState(289);
+      setState(309);
       match(CACTParser::RightBracket);
-      setState(295);
+      setState(315);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
@@ -2792,36 +2988,217 @@ CACTParser::LeftValueContext* CACTParser::leftValue() {
   return _localctx;
 }
 
-//----------------- CompilationUnitContext ------------------------------------------------------------------
+//----------------- SelectionStatementContext ------------------------------------------------------------------
 
-CACTParser::CompilationUnitContext::CompilationUnitContext(ParserRuleContext *parent, size_t invokingState)
+CACTParser::SelectionStatementContext::SelectionStatementContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* CACTParser::CompilationUnitContext::EOF() {
-  return getToken(CACTParser::EOF, 0);
+tree::TerminalNode* CACTParser::SelectionStatementContext::If() {
+  return getToken(CACTParser::If, 0);
 }
 
-CACTParser::TranslationUnitContext* CACTParser::CompilationUnitContext::translationUnit() {
-  return getRuleContext<CACTParser::TranslationUnitContext>(0);
+tree::TerminalNode* CACTParser::SelectionStatementContext::LeftParen() {
+  return getToken(CACTParser::LeftParen, 0);
+}
+
+CACTParser::ConditionContext* CACTParser::SelectionStatementContext::condition() {
+  return getRuleContext<CACTParser::ConditionContext>(0);
+}
+
+tree::TerminalNode* CACTParser::SelectionStatementContext::RightParen() {
+  return getToken(CACTParser::RightParen, 0);
+}
+
+std::vector<CACTParser::StatementContext *> CACTParser::SelectionStatementContext::statement() {
+  return getRuleContexts<CACTParser::StatementContext>();
+}
+
+CACTParser::StatementContext* CACTParser::SelectionStatementContext::statement(size_t i) {
+  return getRuleContext<CACTParser::StatementContext>(i);
+}
+
+tree::TerminalNode* CACTParser::SelectionStatementContext::Else() {
+  return getToken(CACTParser::Else, 0);
 }
 
 
-size_t CACTParser::CompilationUnitContext::getRuleIndex() const {
-  return CACTParser::RuleCompilationUnit;
+size_t CACTParser::SelectionStatementContext::getRuleIndex() const {
+  return CACTParser::RuleSelectionStatement;
 }
 
 
-std::any CACTParser::CompilationUnitContext::accept(tree::ParseTreeVisitor *visitor) {
+std::any CACTParser::SelectionStatementContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
-    return parserVisitor->visitCompilationUnit(this);
+    return parserVisitor->visitSelectionStatement(this);
   else
     return visitor->visitChildren(this);
 }
 
-CACTParser::CompilationUnitContext* CACTParser::compilationUnit() {
-  CompilationUnitContext *_localctx = _tracker.createInstance<CompilationUnitContext>(_ctx, getState());
-  enterRule(_localctx, 60, CACTParser::RuleCompilationUnit);
+CACTParser::SelectionStatementContext* CACTParser::selectionStatement() {
+  SelectionStatementContext *_localctx = _tracker.createInstance<SelectionStatementContext>(_ctx, getState());
+  enterRule(_localctx, 70, CACTParser::RuleSelectionStatement);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(316);
+    match(CACTParser::If);
+    setState(317);
+    match(CACTParser::LeftParen);
+    setState(318);
+    condition();
+    setState(319);
+    match(CACTParser::RightParen);
+    setState(320);
+    statement();
+    setState(323);
+    _errHandler->sync(this);
+
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 32, _ctx)) {
+    case 1: {
+      setState(321);
+      match(CACTParser::Else);
+      setState(322);
+      statement();
+      break;
+    }
+
+    default:
+      break;
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- IterationStatementContext ------------------------------------------------------------------
+
+CACTParser::IterationStatementContext::IterationStatementContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* CACTParser::IterationStatementContext::While() {
+  return getToken(CACTParser::While, 0);
+}
+
+tree::TerminalNode* CACTParser::IterationStatementContext::LeftParen() {
+  return getToken(CACTParser::LeftParen, 0);
+}
+
+CACTParser::ConditionContext* CACTParser::IterationStatementContext::condition() {
+  return getRuleContext<CACTParser::ConditionContext>(0);
+}
+
+tree::TerminalNode* CACTParser::IterationStatementContext::RightParen() {
+  return getToken(CACTParser::RightParen, 0);
+}
+
+CACTParser::StatementContext* CACTParser::IterationStatementContext::statement() {
+  return getRuleContext<CACTParser::StatementContext>(0);
+}
+
+
+size_t CACTParser::IterationStatementContext::getRuleIndex() const {
+  return CACTParser::RuleIterationStatement;
+}
+
+
+std::any CACTParser::IterationStatementContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitIterationStatement(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::IterationStatementContext* CACTParser::iterationStatement() {
+  IterationStatementContext *_localctx = _tracker.createInstance<IterationStatementContext>(_ctx, getState());
+  enterRule(_localctx, 72, CACTParser::RuleIterationStatement);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(325);
+    match(CACTParser::While);
+    setState(326);
+    match(CACTParser::LeftParen);
+    setState(327);
+    condition();
+    setState(328);
+    match(CACTParser::RightParen);
+    setState(329);
+    statement();
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- JumpStatementContext ------------------------------------------------------------------
+
+CACTParser::JumpStatementContext::JumpStatementContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* CACTParser::JumpStatementContext::Semi() {
+  return getToken(CACTParser::Semi, 0);
+}
+
+tree::TerminalNode* CACTParser::JumpStatementContext::Continue() {
+  return getToken(CACTParser::Continue, 0);
+}
+
+tree::TerminalNode* CACTParser::JumpStatementContext::Break() {
+  return getToken(CACTParser::Break, 0);
+}
+
+tree::TerminalNode* CACTParser::JumpStatementContext::Return() {
+  return getToken(CACTParser::Return, 0);
+}
+
+CACTParser::ExpressionContext* CACTParser::JumpStatementContext::expression() {
+  return getRuleContext<CACTParser::ExpressionContext>(0);
+}
+
+
+size_t CACTParser::JumpStatementContext::getRuleIndex() const {
+  return CACTParser::RuleJumpStatement;
+}
+
+
+std::any CACTParser::JumpStatementContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitJumpStatement(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+CACTParser::JumpStatementContext* CACTParser::jumpStatement() {
+  JumpStatementContext *_localctx = _tracker.createInstance<JumpStatementContext>(_ctx, getState());
+  enterRule(_localctx, 74, CACTParser::RuleJumpStatement);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -2833,17 +3210,41 @@ CACTParser::CompilationUnitContext* CACTParser::compilationUnit() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(297);
+    setState(337);
     _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case CACTParser::Continue: {
+        setState(331);
+        match(CACTParser::Continue);
+        break;
+      }
 
-    _la = _input->LA(1);
-    if ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 2031872) != 0)) {
-      setState(296);
-      translationUnit();
+      case CACTParser::Break: {
+        setState(332);
+        match(CACTParser::Break);
+        break;
+      }
+
+      case CACTParser::Return: {
+        setState(333);
+        match(CACTParser::Return);
+        setState(335);
+        _errHandler->sync(this);
+
+        _la = _input->LA(1);
+        if ((((_la & ~ 0x3fULL) == 0) &&
+          ((1ULL << _la) & 4433211817998) != 0)) {
+          setState(334);
+          expression();
+        }
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
     }
-    setState(299);
-    match(CACTParser::EOF);
+    setState(339);
+    match(CACTParser::Semi);
    
   }
   catch (RecognitionException &e) {
@@ -2884,7 +3285,7 @@ std::any CACTParser::TranslationUnitContext::accept(tree::ParseTreeVisitor *visi
 
 CACTParser::TranslationUnitContext* CACTParser::translationUnit() {
   TranslationUnitContext *_localctx = _tracker.createInstance<TranslationUnitContext>(_ctx, getState());
-  enterRule(_localctx, 62, CACTParser::RuleTranslationUnit);
+  enterRule(_localctx, 76, CACTParser::RuleTranslationUnit);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -2896,17 +3297,17 @@ CACTParser::TranslationUnitContext* CACTParser::translationUnit() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(302); 
+    setState(342); 
     _errHandler->sync(this);
     _la = _input->LA(1);
     do {
-      setState(301);
+      setState(341);
       externalDeclaration();
-      setState(304); 
+      setState(344); 
       _errHandler->sync(this);
       _la = _input->LA(1);
     } while ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 2031872) != 0));
+      ((1ULL << _la) & 76112) != 0));
    
   }
   catch (RecognitionException &e) {
@@ -2947,7 +3348,7 @@ std::any CACTParser::ExternalDeclarationContext::accept(tree::ParseTreeVisitor *
 
 CACTParser::ExternalDeclarationContext* CACTParser::externalDeclaration() {
   ExternalDeclarationContext *_localctx = _tracker.createInstance<ExternalDeclarationContext>(_ctx, getState());
-  enterRule(_localctx, 64, CACTParser::RuleExternalDeclaration);
+  enterRule(_localctx, 78, CACTParser::RuleExternalDeclaration);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -2957,19 +3358,19 @@ CACTParser::ExternalDeclarationContext* CACTParser::externalDeclaration() {
     exitRule();
   });
   try {
-    setState(308);
+    setState(348);
     _errHandler->sync(this);
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 33, _ctx)) {
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 36, _ctx)) {
     case 1: {
       enterOuterAlt(_localctx, 1);
-      setState(306);
+      setState(346);
       functionDefinition();
       break;
     }
 
     case 2: {
       enterOuterAlt(_localctx, 2);
-      setState(307);
+      setState(347);
       declaration();
       break;
     }
@@ -3002,12 +3403,12 @@ tree::TerminalNode* CACTParser::FunctionDefinitionContext::Identifier() {
   return getToken(CACTParser::Identifier, 0);
 }
 
-tree::TerminalNode* CACTParser::FunctionDefinitionContext::LeftParenthesis() {
-  return getToken(CACTParser::LeftParenthesis, 0);
+tree::TerminalNode* CACTParser::FunctionDefinitionContext::LeftParen() {
+  return getToken(CACTParser::LeftParen, 0);
 }
 
-tree::TerminalNode* CACTParser::FunctionDefinitionContext::RightParenthesis() {
-  return getToken(CACTParser::RightParenthesis, 0);
+tree::TerminalNode* CACTParser::FunctionDefinitionContext::RightParen() {
+  return getToken(CACTParser::RightParen, 0);
 }
 
 CACTParser::CompoundStatementContext* CACTParser::FunctionDefinitionContext::compoundStatement() {
@@ -3033,7 +3434,7 @@ std::any CACTParser::FunctionDefinitionContext::accept(tree::ParseTreeVisitor *v
 
 CACTParser::FunctionDefinitionContext* CACTParser::functionDefinition() {
   FunctionDefinitionContext *_localctx = _tracker.createInstance<FunctionDefinitionContext>(_ctx, getState());
-  enterRule(_localctx, 66, CACTParser::RuleFunctionDefinition);
+  enterRule(_localctx, 80, CACTParser::RuleFunctionDefinition);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -3045,24 +3446,24 @@ CACTParser::FunctionDefinitionContext* CACTParser::functionDefinition() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(310);
+    setState(350);
     functionType();
-    setState(311);
+    setState(351);
     match(CACTParser::Identifier);
-    setState(312);
-    match(CACTParser::LeftParenthesis);
-    setState(314);
+    setState(352);
+    match(CACTParser::LeftParen);
+    setState(354);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 1966080) != 0)) {
-      setState(313);
+      ((1ULL << _la) & 10512) != 0)) {
+      setState(353);
       functionFParams();
     }
-    setState(316);
-    match(CACTParser::RightParenthesis);
-    setState(317);
+    setState(356);
+    match(CACTParser::RightParen);
+    setState(357);
     compoundStatement();
    
   }
@@ -3112,7 +3513,7 @@ std::any CACTParser::FunctionFParamsContext::accept(tree::ParseTreeVisitor *visi
 
 CACTParser::FunctionFParamsContext* CACTParser::functionFParams() {
   FunctionFParamsContext *_localctx = _tracker.createInstance<FunctionFParamsContext>(_ctx, getState());
-  enterRule(_localctx, 68, CACTParser::RuleFunctionFParams);
+  enterRule(_localctx, 82, CACTParser::RuleFunctionFParams);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -3124,17 +3525,17 @@ CACTParser::FunctionFParamsContext* CACTParser::functionFParams() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(319);
+    setState(359);
     functionFParam();
-    setState(324);
+    setState(364);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == CACTParser::Comma) {
-      setState(320);
+      setState(360);
       match(CACTParser::Comma);
-      setState(321);
+      setState(361);
       functionFParam();
-      setState(326);
+      setState(366);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
@@ -3202,7 +3603,7 @@ std::any CACTParser::FunctionFParamContext::accept(tree::ParseTreeVisitor *visit
 
 CACTParser::FunctionFParamContext* CACTParser::functionFParam() {
   FunctionFParamContext *_localctx = _tracker.createInstance<FunctionFParamContext>(_ctx, getState());
-  enterRule(_localctx, 70, CACTParser::RuleFunctionFParam);
+  enterRule(_localctx, 84, CACTParser::RuleFunctionFParam);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -3214,44 +3615,44 @@ CACTParser::FunctionFParamContext* CACTParser::functionFParam() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(327);
+    setState(367);
     basicType();
-    setState(328);
+    setState(368);
     match(CACTParser::Identifier);
-    setState(344);
+    setState(384);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == CACTParser::LeftBracket) {
-      setState(329);
+      setState(369);
       match(CACTParser::LeftBracket);
-      setState(331);
+      setState(371);
       _errHandler->sync(this);
 
       _la = _input->LA(1);
       if (_la == CACTParser::IntegerConstant) {
-        setState(330);
+        setState(370);
         match(CACTParser::IntegerConstant);
       }
-      setState(333);
+      setState(373);
       match(CACTParser::RightBracket);
-      setState(341);
+      setState(381);
       _errHandler->sync(this);
       _la = _input->LA(1);
       while (_la == CACTParser::LeftBracket) {
-        setState(334);
+        setState(374);
         match(CACTParser::LeftBracket);
-        setState(336);
+        setState(376);
         _errHandler->sync(this);
 
         _la = _input->LA(1);
         if (_la == CACTParser::IntegerConstant) {
-          setState(335);
+          setState(375);
           match(CACTParser::IntegerConstant);
         }
-        setState(338);
+        setState(378);
         match(CACTParser::RightBracket);
-        setState(343);
+        setState(383);
         _errHandler->sync(this);
         _la = _input->LA(1);
       }
@@ -3273,31 +3674,48 @@ CACTParser::NumberContext::NumberContext(ParserRuleContext *parent, size_t invok
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* CACTParser::NumberContext::IntegerConstant() {
-  return getToken(CACTParser::IntegerConstant, 0);
-}
-
-tree::TerminalNode* CACTParser::NumberContext::FloatingConstant() {
-  return getToken(CACTParser::FloatingConstant, 0);
-}
-
 
 size_t CACTParser::NumberContext::getRuleIndex() const {
   return CACTParser::RuleNumber;
 }
 
+void CACTParser::NumberContext::copyFrom(NumberContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
 
-std::any CACTParser::NumberContext::accept(tree::ParseTreeVisitor *visitor) {
+//----------------- FloatingConstantContext ------------------------------------------------------------------
+
+tree::TerminalNode* CACTParser::FloatingConstantContext::FloatingConstant() {
+  return getToken(CACTParser::FloatingConstant, 0);
+}
+
+CACTParser::FloatingConstantContext::FloatingConstantContext(NumberContext *ctx) { copyFrom(ctx); }
+
+
+std::any CACTParser::FloatingConstantContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
-    return parserVisitor->visitNumber(this);
+    return parserVisitor->visitFloatingConstant(this);
   else
     return visitor->visitChildren(this);
 }
+//----------------- IntegerConstantContext ------------------------------------------------------------------
 
+tree::TerminalNode* CACTParser::IntegerConstantContext::IntegerConstant() {
+  return getToken(CACTParser::IntegerConstant, 0);
+}
+
+CACTParser::IntegerConstantContext::IntegerConstantContext(NumberContext *ctx) { copyFrom(ctx); }
+
+
+std::any CACTParser::IntegerConstantContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<CACTVisitor*>(visitor))
+    return parserVisitor->visitIntegerConstant(this);
+  else
+    return visitor->visitChildren(this);
+}
 CACTParser::NumberContext* CACTParser::number() {
   NumberContext *_localctx = _tracker.createInstance<NumberContext>(_ctx, getState());
-  enterRule(_localctx, 72, CACTParser::RuleNumber);
-  size_t _la = 0;
+  enterRule(_localctx, 86, CACTParser::RuleNumber);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -3307,17 +3725,27 @@ CACTParser::NumberContext* CACTParser::number() {
     exitRule();
   });
   try {
-    enterOuterAlt(_localctx, 1);
-    setState(346);
-    _la = _input->LA(1);
-    if (!(_la == CACTParser::IntegerConstant
+    setState(388);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case CACTParser::IntegerConstant: {
+        _localctx = _tracker.createInstance<CACTParser::IntegerConstantContext>(_localctx);
+        enterOuterAlt(_localctx, 1);
+        setState(386);
+        match(CACTParser::IntegerConstant);
+        break;
+      }
 
-    || _la == CACTParser::FloatingConstant)) {
-    _errHandler->recoverInline(this);
-    }
-    else {
-      _errHandler->reportMatch(this);
-      consume();
+      case CACTParser::FloatingConstant: {
+        _localctx = _tracker.createInstance<CACTParser::FloatingConstantContext>(_localctx);
+        enterOuterAlt(_localctx, 2);
+        setState(387);
+        match(CACTParser::FloatingConstant);
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
     }
    
   }

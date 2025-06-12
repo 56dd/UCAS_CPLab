@@ -3,9 +3,16 @@ grammar CACT;
 @header {
     #include <vector>
     #include <string>
+    #include "utils/CACT.h"
+    #include "symbolTable.h"
+    #include "IR/IRBasicBlock.h"
 }
 
-/* parser */
+/****** parser ******/
+
+compilationUnit
+    : translationUnit? EOF
+    ;
 
 functionType
     : 'void'
@@ -14,96 +21,172 @@ functionType
 
 basicType
     : 'int'
-    | 'char'
+    | 'bool'
     | 'float'
     | 'double'
     ;
 
 primaryExpression
-    : leftValue
+    locals [IRBasicBlock *trueBlock = nullptr,
+            IRBasicBlock *falseBlock = nullptr]
+    : lValue
     | number 
-    | CharacterConstant
-    | '(' expression ')'
+    | LeftParen expression RightParen
     ;
 
 unaryExpression
+    locals [IRBasicBlock *trueBlock = nullptr,
+            IRBasicBlock *falseBlock = nullptr]
     : primaryExpression
     | unaryOperator unaryExpression
-    | Identifier '(' (functionRParams)? ')'
-    ;
-
-unaryOperator
-    : '+'
-    | '-'
-    | '!'
+    | Identifier LeftParen (functionRParams)? RightParen
     ;
 
 functionRParams
+    locals [FuncSymbolInfo *func]
     : expression (',' expression)*
     ;
 
-additiveExpression
-    : multiplicativeExpression (op = ('+' | '-') multiplicativeExpression)*
+unaryOperator
+    : addOp
+    | Not
     ;
 
+addOp
+    : '+'
+    | '-'
+    ;
+
+/*以下优先级是往下递减的，A->B op B，则B的优先级比A的优先级要高 */
+//unaryExpression的优先级比较高
 multiplicativeExpression
-    : unaryExpression (op = ('*' | '/' | '%') unaryExpression)*
+    locals [IRBasicBlock *trueBlock = nullptr,
+            IRBasicBlock *falseBlock = nullptr]
+    : unaryExpression (multiplicativeOp unaryExpression)*
+    ;
+
+multiplicativeOp
+    : '*'
+    | '/'
+    | '%'
+    ;
+
+additiveExpression
+    locals [IRBasicBlock *trueBlock = nullptr,
+            IRBasicBlock *falseBlock = nullptr]
+    : multiplicativeExpression (additiveOp multiplicativeExpression)*
+    ;
+
+additiveOp
+    : '+'
+    | '-'
     ;
 
 relationalExpression
-    : additiveExpression (op = ('<' | '>' | '<=' | '>=') additiveExpression)?
+    locals [IRBasicBlock *trueBlock = nullptr,
+            IRBasicBlock *falseBlock = nullptr]
+    : additiveExpression (relationalOp additiveExpression)?
+    ;
+
+relationalOp
+    : '<'
+    | '>'
+    | '<='
+    | '>='
     ;
 
 equalityExpression
-    : relationalExpression (op = ('==' | '!=') relationalExpression)?
+    locals [IRBasicBlock *trueBlock = nullptr,
+            IRBasicBlock *falseBlock = nullptr]
+    : relationalExpression (equalityOp relationalExpression)?
+    ;
+
+equalityOp
+    : '=='
+    | '!='
     ;
 
 logicalAndExpression
-    : equalityExpression (op = '&&' equalityExpression)*
+    locals [IRBasicBlock *trueBlock = nullptr,
+            IRBasicBlock *falseBlock = nullptr]
+    : equalityExpression (logicalAndOp equalityExpression)*
+    ;
+
+logicalAndOp
+    : '&&'
     ;
 
 logicalOrExpression
-    : logicalAndExpression (op = '||' logicalAndExpression)*
+    locals [IRBasicBlock *trueBlock = nullptr,
+            IRBasicBlock *falseBlock = nullptr]
+    : logicalAndExpression (logicalOrOp logicalAndExpression)*
+    ;
+
+logicalOrOp
+    : '||'
+    ;
+
+/*****************************以上*****************************/
+
+expression
+    locals [IRBasicBlock *trueBlock = nullptr,
+            IRBasicBlock *falseBlock = nullptr]
+    : additiveExpression
+    | BooleanConstant
+    ;
+//expression是最基础的表达式
+
+constantExpression
+    locals [DataType dataType]
+    : (addOp)? number
+    | BooleanConstant
     ;
 
 condition
+    locals [IRBasicBlock *trueBlock = nullptr,
+            IRBasicBlock *falseBlock = nullptr]
     : logicalOrExpression
     ;
 
-constantExpression
-    : number
-    | CharacterConstant
-    ;
 
-constantInitValue
-    : constantExpression
-    | '{' (constantInitValue (',' constantInitValue)*)? '}'
-    ;
-
-expression
-    : additiveExpression 
-    ;
-
+/*declaration部分 */
 declaration
+    //locals [BlockInfo * thisblockinfo]
     : constantDeclaration
     | variableDeclaration
     ;
 
 constantDeclaration
-    : 'const' basicType constantDefinition (',' constantDefinition)* ';'
+    locals [DataType dataType]
+    : Const basicType constantDefinition (',' constantDefinition)* ';'
     ;
 
 constantDefinition
-    : Identifier ('[' IntegerConstant ']')* '=' constantInitValue
+    locals [DataType dataType,
+            std::vector<int> arraySize]
+    : Identifier (LeftBracket IntegerConstant RightBracket)* Assign constantInitValue
     ;
 
+constantInitValue
+    locals [DataType dataType,
+            std::vector<int> arraySize,
+            int dimension]
+    : constantExpression
+    | LeftBrace (constantInitValue (',' constantInitValue)*)? RightBrace//这里可能考虑的是对数组进行赋值
+    ;                                                                           
+
 variableDeclaration
+    locals [DataType dataType]
     : basicType variableDefinition (',' variableDefinition)* ';'
     ;
 
 variableDefinition
-    : Identifier ('[' IntegerConstant ']')* ('=' constantInitValue)?
+    locals [DataType dataType,
+            std::vector<int> arraySize]
+    : Identifier (LeftBracket IntegerConstant RightBracket)* (Assign constantInitValue)?
     ;
+/*declaration部分 */
+/*CACT中声明的时候对于const必须显式的进行赋值 */
 
 statement
     : compoundStatement
@@ -113,22 +196,51 @@ statement
     | jumpStatement
     ;
 
-compoundStatement
-    : '{' blockItemList? '}'
+compoundStatement//复合语句
+    locals [BlockInfo * thisblockinfo,
+            FuncSymbolInfo * thisfuncinfo = nullptr]
+    : LeftBrace blockItemList? RightBrace
     ;
+
+blockItemList
+    //locals [BlockItemContext * lastblockitem]
+    : blockItem+
+    ;
+
+blockItem
+    : statement//往下添加子块
+    | declaration//往下添加符号表
+    ;
+//一个blockItem要么是一个语句，要么是一个声明
 
 expressionStatement
-    : expression? ';'
-    | leftValue '=' expression ';'
+    : expression? ';' // 函数调用
+    | lValue Assign expression ';'
     ;
+//表达式语句
+
+lValue
+    locals [bool loadable]
+    : Identifier (LeftBracket expression RightBracket)*
+    ;
+//lvalue一般是针对数组
 
 selectionStatement
-    : If '(' expression ')' statement (Else statement)?
+    locals [BlockInfo * thisblockinfo,
+            bool ifelseType = false]
+    : If LeftParen condition RightParen statement (Else statement)?
     ;
+//暂且不考虑else if
 
 iterationStatement
-    : While '(' expression ')' statement
+    locals [BlockInfo * thisblockinfo,
+            IRBasicBlock *preheader = nullptr,
+            IRBasicBlock *bodyBlock = nullptr,
+            IRBasicBlock *latch = nullptr,
+            IRBasicBlock *nextBlock = nullptr]
+    : While LeftParen condition RightParen statement
     ;
+//暂且不考虑for循环
 
 jumpStatement
     : (
@@ -137,69 +249,45 @@ jumpStatement
         | Return expression?
     ) ';'
     ;
-
-blockItem
-    : statement
-    | declaration
-    ;
-
-blockItemList
-    : blockItem+
-    ;
-
-leftValue
-    : Identifier ('[' expression ']')* 
-    ;
-
-compilationUnit
-    : translationUnit? EOF
-    ;
+//jump
 
 translationUnit
     : externalDeclaration+
     ;
 
 externalDeclaration
+    //locals [BlockInfo * thisblockinfo]
     : functionDefinition
     | declaration
     ;
 
 functionDefinition
-    : functionType Identifier '(' functionFParams? ')' compoundStatement
+    locals [BlockInfo * thisblockinfo ,
+            FuncSymbolInfo * thisfuncinfo]
+    : functionType Identifier LeftParen functionFParams? RightParen compoundStatement
     ;
 
 functionFParams
+    locals [FuncSymbolInfo * thisfuncinfo,
+            std::vector < SymbolInfo * > paramList,
+            IRBasicBlock* irbasicblock]
     : functionFParam (',' functionFParam)*
     ;
 
 functionFParam
-    : basicType Identifier ('[' IntegerConstant? ']' ('[' IntegerConstant? ']')*)?
+    locals [FuncSymbolInfo * thisfuncinfo,
+            SymbolInfo * Fparam,
+            unsigned beforeFuncCount,
+            IRBasicBlock* irbasicblock]
+    : basicType Identifier (LeftBracket IntegerConstant? RightBracket (LeftBracket IntegerConstant? RightBracket)*)?
     ;
 
 number
-    : IntegerConstant
-    | FloatingConstant
+    : IntegerConstant   # IntegerConstant
+    | FloatingConstant  # FloatingConstant
     ;
 
-/* -skip- */
-
-Whitespace
-    : [ \t]+ -> channel(HIDDEN)
-    ;
-
-Newline
-    : ('\r' '\n'? | '\n') -> channel(HIDDEN)
-    ;
-
-CommentLine
-    : '//' ~[\r\n]* -> channel(HIDDEN)
-    ;
-
-CommentBlock
-    : '/*' .*? '*/' -> channel(HIDDEN)
-    ;
-
-/* lexer */
+/****** lexer  ******/
 
 IntegerConstant
     : DecimalConstant
@@ -212,14 +300,17 @@ FloatingConstant
     | DigitSequence ExponentPart FloatingSuffix?
     ;
 
-CharacterConstant
-    : '\'' (EscapeSequence | ~['\\\r\n]) '\''
+BooleanConstant
+    : True
+    | False
     ;
 
-fragment EscapeSequence
-    : '\\' [btnvrfa\\'"?]
-    | '\\' OctalDigit+
-    | '\\x' HexadecimalDigit+
+Bool
+    : 'bool'
+    ;
+
+Break
+    : 'break'
     ;
 
 Const
@@ -230,59 +321,51 @@ Continue
     : 'continue'
     ;
 
-While
-    : 'while'
-    ;
-
-Break
-    : 'break'
-    ;
-
-True
-    : 'true'
-    ;
-
-False
-    : 'false'
-    ;
-
-If
-    : 'if'
+Double
+    : 'double'
     ;
 
 Else
     : 'else'
     ;
 
-Void
-    : 'void'
-    ;
-
-Int
-    : 'int'
-    ;
-
-Char
-    : 'char'
+False
+    : 'false'
     ;
 
 Float
     : 'float'
     ;
 
-Double
-    : 'double'
+If
+    : 'if'
+    ;
+
+Int
+    : 'int'
     ;
 
 Return
     : 'return'
     ;
 
-LeftParenthesis
+True
+    : 'true'
+    ;
+
+Void
+    : 'void'
+    ;
+
+While
+    : 'while'
+    ;
+
+LeftParen
     : '('
     ;
 
-RightParenthesis
+RightParen
     : ')'
     ;
 
@@ -350,7 +433,7 @@ Not
     : '!'
     ;
 
-Semicolon
+Semi
     : ';'
     ;
 
@@ -378,20 +461,20 @@ Identifier
     : Nondigit (Nondigit | Digit)*
     ;
 
-fragment Digit
-    : [0-9]
-    ;
-
 fragment Nondigit
     : [a-zA-Z_]
     ;
 
-fragment OctalConstant
-    : '0' OctalDigit*
+fragment Digit
+    : [0-9]
     ;
 
-fragment OctalDigit
-    : [0-7]
+fragment DecimalConstant
+    : NonzeroDigit Digit*
+    ;
+
+fragment OctalConstant
+    : '0' OctalDigit*
     ;
 
 fragment HexadecimalConstant
@@ -402,16 +485,16 @@ fragment HexadecimalPrefix
     : '0' [xX]
     ;
 
-fragment HexadecimalDigit
-    : [0-9a-fA-F]
-    ;
-
-fragment DecimalConstant
-    : NonzeroDigit Digit*
-    ;
-
 fragment NonzeroDigit
     : [1-9]
+    ;
+
+fragment OctalDigit
+    : [0-7]
+    ;
+
+fragment HexadecimalDigit
+    : [0-9a-fA-F]
     ;
 
 fragment FractionalConstant
@@ -433,4 +516,21 @@ fragment DigitSequence
 
 fragment FloatingSuffix
     : [fF]
+    ;
+
+/****** skips  ******/
+Whitespace
+    : [ \t]+ -> channel(HIDDEN)
+    ;
+
+Newline
+    : ('\r' '\n'? | '\n') -> channel(HIDDEN)
+    ;
+
+BlockComment
+    : '/*' .*? '*/' -> channel(HIDDEN)
+    ;
+
+LineComment
+    : '//' ~[\r\n]* -> channel(HIDDEN)
     ;

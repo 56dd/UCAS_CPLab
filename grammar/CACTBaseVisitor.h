@@ -1,6 +1,9 @@
 
     #include <vector>
     #include <string>
+    #include "utils/CACT.h"
+    #include "symbolTable.h"
+    #include "IR/IRBasicBlock.h"
 
 
 // Generated from CACT.g4 by ANTLR 4.13.1
@@ -19,6 +22,10 @@
 class  CACTBaseVisitor : public CACTVisitor {
 public:
 
+  virtual std::any visitCompilationUnit(CACTParser::CompilationUnitContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitFunctionType(CACTParser::FunctionTypeContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -35,15 +42,15 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitUnaryOperator(CACTParser::UnaryOperatorContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual std::any visitFunctionRParams(CACTParser::FunctionRParamsContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual std::any visitAdditiveExpression(CACTParser::AdditiveExpressionContext *ctx) override {
+  virtual std::any visitUnaryOperator(CACTParser::UnaryOperatorContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitAddOp(CACTParser::AddOpContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -51,7 +58,23 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitMultiplicativeOp(CACTParser::MultiplicativeOpContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitAdditiveExpression(CACTParser::AdditiveExpressionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitAdditiveOp(CACTParser::AdditiveOpContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitRelationalExpression(CACTParser::RelationalExpressionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitRelationalOp(CACTParser::RelationalOpContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -59,7 +82,15 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitEqualityOp(CACTParser::EqualityOpContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitLogicalAndExpression(CACTParser::LogicalAndExpressionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitLogicalAndOp(CACTParser::LogicalAndOpContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -67,7 +98,11 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitCondition(CACTParser::ConditionContext *ctx) override {
+  virtual std::any visitLogicalOrOp(CACTParser::LogicalOrOpContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitExpression(CACTParser::ExpressionContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -75,11 +110,7 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitConstantInitValue(CACTParser::ConstantInitValueContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual std::any visitExpression(CACTParser::ExpressionContext *ctx) override {
+  virtual std::any visitCondition(CACTParser::ConditionContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -92,6 +123,10 @@ public:
   }
 
   virtual std::any visitConstantDefinition(CACTParser::ConstantDefinitionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitConstantInitValue(CACTParser::ConstantInitValueContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -111,7 +146,19 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitBlockItemList(CACTParser::BlockItemListContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitBlockItem(CACTParser::BlockItemContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitExpressionStatement(CACTParser::ExpressionStatementContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitLValue(CACTParser::LValueContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -124,22 +171,6 @@ public:
   }
 
   virtual std::any visitJumpStatement(CACTParser::JumpStatementContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual std::any visitBlockItem(CACTParser::BlockItemContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual std::any visitBlockItemList(CACTParser::BlockItemListContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual std::any visitLeftValue(CACTParser::LeftValueContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual std::any visitCompilationUnit(CACTParser::CompilationUnitContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -163,7 +194,11 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitNumber(CACTParser::NumberContext *ctx) override {
+  virtual std::any visitIntegerConstant(CACTParser::IntegerConstantContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitFloatingConstant(CACTParser::FloatingConstantContext *ctx) override {
     return visitChildren(ctx);
   }
 

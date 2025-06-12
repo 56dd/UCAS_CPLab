@@ -1,6 +1,9 @@
 
     #include <vector>
     #include <string>
+    #include "utils/CACT.h"
+    #include "symbolTable.h"
+    #include "IR/IRBasicBlock.h"
 
 
 // Generated from CACT.g4 by ANTLR 4.13.1
@@ -16,15 +19,15 @@
 class  CACTLexer : public antlr4::Lexer {
 public:
   enum {
-    Whitespace = 1, Newline = 2, CommentLine = 3, CommentBlock = 4, IntegerConstant = 5, 
-    FloatingConstant = 6, CharacterConstant = 7, Const = 8, Continue = 9, 
-    While = 10, Break = 11, True = 12, False = 13, If = 14, Else = 15, Void = 16, 
-    Int = 17, Char = 18, Float = 19, Double = 20, Return = 21, LeftParenthesis = 22, 
-    RightParenthesis = 23, LeftBracket = 24, RightBracket = 25, LeftBrace = 26, 
-    RightBrace = 27, Less = 28, LessEqual = 29, Greater = 30, GreaterEqual = 31, 
-    Plus = 32, Minus = 33, Star = 34, Div = 35, Mod = 36, AndAnd = 37, OrOr = 38, 
-    Not = 39, Semicolon = 40, Comma = 41, Assign = 42, Equal = 43, NotEqual = 44, 
-    Dot = 45, Identifier = 46
+    IntegerConstant = 1, FloatingConstant = 2, BooleanConstant = 3, Bool = 4, 
+    Break = 5, Const = 6, Continue = 7, Double = 8, Else = 9, False = 10, 
+    Float = 11, If = 12, Int = 13, Return = 14, True = 15, Void = 16, While = 17, 
+    LeftParen = 18, RightParen = 19, LeftBracket = 20, RightBracket = 21, 
+    LeftBrace = 22, RightBrace = 23, Less = 24, LessEqual = 25, Greater = 26, 
+    GreaterEqual = 27, Plus = 28, Minus = 29, Star = 30, Div = 31, Mod = 32, 
+    AndAnd = 33, OrOr = 34, Not = 35, Semi = 36, Comma = 37, Assign = 38, 
+    Equal = 39, NotEqual = 40, Dot = 41, Identifier = 42, Whitespace = 43, 
+    Newline = 44, BlockComment = 45, LineComment = 46
   };
 
   explicit CACTLexer(antlr4::CharStream *input);
