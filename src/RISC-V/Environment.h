@@ -1,0 +1,11 @@
+#ifndef COMPILER_ENVIRONMENT_H
+#define COMPILER_ENVIRONMENT_H
+
+enum Section {
+    BSS,
+    RODATA,
+    DATA,
+    TEXT
+};
+
+#endif //COMPILER_ENVIRONMENT_H

@@ -1,0 +1,129 @@
+#ifndef FIRST_TERM_INST
+#define FIRST_TERM_INST(num)
+#endif
+#ifndef HANDLE_TERM_INST
+#ifndef HANDLE_INST
+#define HANDLE_TERM_INST(num, opcode, Class)
+#else
+#define HANDLE_TERM_INST(num, opcode, Class) HANDLE_INST(num, opcode, Class)
+#endif
+#endif
+#ifndef LAST_TERM_INST
+#define LAST_TERM_INST(num)
+#endif
+
+#ifndef FIRST_BINARY_INST
+#define FIRST_BINARY_INST(num)
+#endif
+#ifndef HANDLE_BINARY_INST
+#ifndef HANDLE_INST
+#define HANDLE_BINARY_INST(num, opcode, instclass)
+#else
+#define HANDLE_BINARY_INST(num, opcode, Class) HANDLE_INST(num, opcode, Class)
+#endif
+#endif
+#ifndef LAST_BINARY_INST
+#define LAST_BINARY_INST(num)
+#endif
+
+#ifndef FIRST_MEMORY_INST
+#define FIRST_MEMORY_INST(num)
+#endif
+#ifndef HANDLE_MEMORY_INST
+#ifndef HANDLE_INST
+#define HANDLE_MEMORY_INST(num, opcode, Class)
+#else
+#define HANDLE_MEMORY_INST(num, opcode, Class) HANDLE_INST(num, opcode, Class)
+#endif
+#endif
+#ifndef LAST_MEMORY_INST
+#define LAST_MEMORY_INST(num)
+#endif
+
+#ifndef FIRST_OTHER_INST
+#define FIRST_OTHER_INST(num)
+#endif
+#ifndef HANDLE_OTHER_INST
+#ifndef HANDLE_INST
+#define HANDLE_OTHER_INST(num, opcode, Class)
+#else
+#define HANDLE_OTHER_INST(num, opcode, Class) HANDLE_INST(num, opcode, Class)
+#endif
+#endif
+#ifndef LAST_OTHER_INST
+#define LAST_OTHER_INST(num)
+#endif
+
+FIRST_TERM_INST(1)
+HANDLE_TERM_INST(1, Ret, ReturnInst)
+HANDLE_TERM_INST(2, J, JumpInst)
+HANDLE_TERM_INST(3, Beq, BranchInst)
+HANDLE_TERM_INST(4, Beqz, BranchInst)
+HANDLE_TERM_INST(5, Bge, BranchInst)
+HANDLE_TERM_INST(6, Bgez, BranchInst)
+HANDLE_TERM_INST(7, Bgt, BranchInst)
+HANDLE_TERM_INST(8, Bgtz, BranchInst)
+HANDLE_TERM_INST(9, Ble, BranchInst)
+HANDLE_TERM_INST(10, Blez, BranchInst)
+HANDLE_TERM_INST(11, Blt, BranchInst)
+HANDLE_TERM_INST(12, Bltz, BranchInst)
+HANDLE_TERM_INST(13, Bne, BranchInst)
+HANDLE_TERM_INST(14, Bnez, BranchInst)
+LAST_TERM_INST(14)
+
+
+FIRST_BINARY_INST(15)
+HANDLE_BINARY_INST(15, Add, BinaryOperator)
+HANDLE_BINARY_INST(16, Addi, BinaryOperator)
+HANDLE_BINARY_INST(17, Sub, BinaryOperator)
+HANDLE_BINARY_INST(18, Mul, BinaryOperator)
+HANDLE_BINARY_INST(19, Div, BinaryOperator)
+HANDLE_BINARY_INST(20, Rem, BinaryOperator)
+HANDLE_BINARY_INST(21, Xori, BinaryOperator)
+
+HANDLE_BINARY_INST(22, Feq, SetCondInst)
+HANDLE_BINARY_INST(23, Fle, SetCondInst)
+HANDLE_BINARY_INST(24, Flt, SetCondInst)
+LAST_BINARY_INST(24)
+
+FIRST_MEMORY_INST(25)
+HANDLE_MEMORY_INST(25, Lb, LoadInst)
+HANDLE_MEMORY_INST(26, Lw, LoadInst)
+HANDLE_MEMORY_INST(27, Ld, LoadInst)
+HANDLE_MEMORY_INST(28, La, LoadInst)
+HANDLE_MEMORY_INST(29, Flw, LoadInst)
+HANDLE_MEMORY_INST(30, Fld, LoadInst)
+HANDLE_MEMORY_INST(31, Sb, StoreInst)
+HANDLE_MEMORY_INST(32, Sw, StoreInst)
+HANDLE_MEMORY_INST(33, Sd, StoreInst)
+HANDLE_MEMORY_INST(34, Fsw, StoreInst)
+HANDLE_MEMORY_INST(35, Fsd, StoreInst)
+LAST_MEMORY_INST(35)
+
+
+FIRST_OTHER_INST(36)
+HANDLE_OTHER_INST(36, Call, CallInst)
+HANDLE_OTHER_INST(37, Mv, MoveInst)
+HANDLE_OTHER_INST(38, Fmv, MoveInst)
+HANDLE_OTHER_INST(39, Li, LiInst)
+LAST_OTHER_INST(39)
+
+#undef FIRST_TERM_INST
+#undef HANDLE_TERM_INST
+#undef LAST_TERM_INST
+
+#undef FIRST_BINARY_INST
+#undef HANDLE_BINARY_INST
+#undef LAST_BINARY_INST
+
+#undef FIRST_MEMORY_INST
+#undef HANDLE_MEMORY_INST
+#undef LAST_MEMORY_INST
+
+#undef FIRST_OTHER_INST
+#undef HANDLE_OTHER_INST
+#undef LAST_OTHER_INST
+
+#ifdef HANDLE_INST
+#undef HANDLE_INST
+#endif

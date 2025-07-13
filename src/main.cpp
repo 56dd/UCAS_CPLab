@@ -1,68 +1,67 @@
 #include <iostream>
 #include <ostream>
-#include <type_traits>
 
-// #include "antlr4-runtime.h"
-#include "tree/ErrorNode.h"
-
-#include "CACTLexer.h"
-#include "CACTParser.h"
-#include "CACTVisitor.h"
-#include "tree/ParseTree.h"
+#include "IR/IRModule.h"
+#include "FrontEnd.h"
+#include "Optimizer.h"
+#include "BackEnd.h"
+#include "Interpreter/Interpreter.h"
+#include "utils/CLParser.h"
 
 using namespace antlr4;
 
-// class Analysis : public HelloVisitor {
-// public:
-//     std::any visitR(HelloParser::RContext *context) {
-//         visitChildren( context );
-        
-//         std::cout << "enter rule [r]!" << std::endl;
-//         std::cout << context->ID().data() << std::endl;
-//         std::cout << "the ID is: " << context->ID(0)->getText() << std::endl;
-//         std::cout << "the ID is: " << context->ID(1)->getText() << std::endl;
-//         return nullptr;
-//     }
+int main(int argc, const char *argv[]) {
+    CLParser parser;
+    parser.add("simulate");
+    parser.add("verbose");
+    parser.add("c");
+    parser.add("emit-IR");
+    parser.parse(argc, argv);
 
-//     std::any visitErrorNode(tree::ErrorNode * node) override {
-//         std::cout << "visit error node!" << std::endl;
-//         return nullptr;
-//     }
-// };
+    /*读取输入cact文件*/
+    std::string file(parser.getFilePath());
+    std::ifstream stream;
+    stream.open(file);
 
-int main(int argc, const char* argv[]) {
-  	if (argc < 2) {
-   	 	std::cout << "Error! Missing source file" << std::endl;
-		return 0;
-	}
-	std::ifstream stream;
-	stream.open(argv[1]);
+    /*文件不存在则报错*/
+    if (!stream.is_open()) {
+        std::cerr << "Error: Fail to open " << file << std::endl;
+        return 1;
+    }
 
-	ANTLRInputStream   input(stream);
-	CACTLexer         lexer(&input);
-	CommonTokenStream  tokens(&lexer);
-	CACTParser        parser(&tokens);
+    /*遍历语法树，生成无优化IR代码*/
+    IRModule ir(file);
+    FrontEnd frontEnd(&stream, &ir);
 
-	tree::ParseTree *ctx = parser.compilationUnit();
+    try {
+        frontEnd.analyze();
+    } catch (const std::exception &e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return 1;
+    }
 
-	int flag = 1;
+    /*对IR代码进行优化；opt建立，划定优先级，根据优先级跑优化pass*/
+    Optimizer opt(&ir);
+    opt.build();
+    opt.setLevel(parser.getLevel());
+    opt.run();
 
-	if (lexer.getNumberOfSyntaxErrors() > 0) {
-		std::cout << "lex error: " << lexer.getNumberOfSyntaxErrors() << std::endl;
-		flag = 0;
-	}
+    /*打印优化之后的IR代码*/
+    if (parser.get("emit-IR"))
+        frontEnd.print();
 
-	if (parser.getNumberOfSyntaxErrors() > 0) {
-		std::cout << "syntax error: " << parser.getNumberOfSyntaxErrors() << std::endl;
-		flag = 0;
-	}
+    /*解释执行或者直接生成RISCV代码*/
+    Interpreter ip(&ir);
+    Interpreter::debugOpt = parser.get("verbose");
+    if (parser.get("simulate") || parser.get("verbose")) {
+        int ret = ip.interpret();
+        if (parser.get("c"))
+            printf("inst_cnt = %d\n", Interpreter::getInstCnt());
+        return ret;
+    } else {
+        BackEnd backEnd(&ir);
+        backEnd.print();
+    }
 
-	if (flag)
-		std::cout << "true" << std::endl;
-	else
-		std::cout << "false" << std::endl;
-
-	// std::cout << ctx->toStringTree() << std::endl;
-
-	return 0;
+    return 0;
 }
