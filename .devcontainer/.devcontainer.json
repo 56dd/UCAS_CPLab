@@ -1,0 +1,19 @@
+{
+  "name": "CACT Dev Environment",
+  "image": "amadeus979/cact-dev:v0.1",
+  "mounts": [
+      "source=${localWorkspaceFolder}/cact,target=/opt/cact,type=bind,readonly"
+  ],
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+      "vscode": {
+          "extensions": [
+              "ms-vscode.cpptools",
+              "ms-vscode.cmake-tools",
+              "ms-vscode.hexeditor"
+          ]
+      }
+  },
+  "remoteUser": "root"
+}

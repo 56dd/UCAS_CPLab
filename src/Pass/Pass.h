@@ -1,61 +1,176 @@
 #ifndef COMPILER_PASS_H
 #define COMPILER_PASS_H
-#pragma once
+
+#include <string>
+#include <memory>
+#include <chrono>
+
 #include "IR/IRModule.h"
-#include "Optimizer.h"
 
 class Optimizer;
 
+/**
+ * @brief Base class for all optimization passes
+ */
 class Pass {
 public:
-    explicit Pass(std::string name, int level);
+    /**
+     * @brief Constructs a Pass with name and optimization level
+     * @param pass_name Name of the pass
+     * @param optimization_level Optimization level this pass belongs to
+     */
+    explicit Pass(const std::string& pass_name, int optimization_level);
 
-    virtual void run(IRModule &ir) = 0;
+    /**
+     * @brief Virtual destructor
+     */
+    virtual ~Pass() = default;
 
-    void addToOpt(Optimizer &opt);
+    /**
+     * @brief Runs the pass on the given IR module
+     * @param ir_module IR module to optimize
+     * @throws std::runtime_error if pass execution fails
+     */
+    virtual void run(IRModule& ir_module) = 0;
 
-    int getLevel() const;
+    /**
+     * @brief Adds this pass to the optimizer
+     * @param optimizer Optimizer to add the pass to
+     */
+    void addToOptimizer(Optimizer& optimizer);
+
+    /**
+     * @brief Gets the optimization level of this pass
+     * @return Optimization level
+     */
+    int getOptimizationLevel() const { return optimization_level_; }
+
+    /**
+     * @brief Gets the name of this pass
+     * @return Pass name
+     */
+    const std::string& getName() const { return pass_name_; }
+
+    /**
+     * @brief Gets the execution time of the last run
+     * @return Execution time in milliseconds
+     */
+    double getLastExecutionTime() const { return last_execution_time_; }
+
+    /**
+     * @brief Checks if the pass should be run at the given optimization level
+     * @param level Current optimization level
+     * @return True if pass should be run
+     */
+    bool shouldRunAtLevel(int level) const { return optimization_level_ <= level; }
+
+protected:
+    /**
+     * @brief Records the execution time of the pass
+     * @param start_time Start time
+     * @param end_time End time
+     */
+    void recordExecutionTime(const std::chrono::high_resolution_clock::time_point& start_time,
+                           const std::chrono::high_resolution_clock::time_point& end_time);
+
+    /**
+     * @brief Validates the pass state before execution
+     * @throws std::runtime_error if validation fails
+     */
+    virtual void validateState() const;
 
 private:
-    std::string name;
-
-    int level = 0;
+    std::string pass_name_;
+    int optimization_level_;
+    double last_execution_time_;
 };
 
-/*!
- * FunctionPass - 如果该Pass不删除或增加函数并且应用于所有函数的优化就继承此类
+/**
+ * @brief Pass that operates on individual functions
+ * 
+ * FunctionPass is designed for optimizations that:
+ * - Do not delete or add functions
+ * - Apply optimizations to all functions in the module
+ * - May modify the control flow within functions
  */
 class FunctionPass : public Pass {
 public:
-    explicit FunctionPass(std::string name, int level);
-
-    /*!
-     * runOnFunction - 在函数上运行的优化行为
-     * @param F 函数引用
+    /**
+     * @brief Constructs a FunctionPass
+     * @param pass_name Name of the pass
+     * @param optimization_level Optimization level
      */
-    virtual void runOnFunction(IRFunction &F) = 0;
+    explicit FunctionPass(const std::string& pass_name, int optimization_level);
 
-    /*!
-     * run - 在IRModule上运行的优化行为
-     * @param M IRModule引用
+    /**
+     * @brief Destructor
      */
-    virtual void run(IRModule &M);
+    ~FunctionPass() override = default;
+
+    /**
+     * @brief Runs the pass on the entire IR module
+     * @param ir_module IR module to optimize
+     */
+    void run(IRModule& ir_module) override;
+
+protected:
+    /**
+     * @brief Runs the pass on a single function
+     * @param function Function to optimize
+     * @throws std::runtime_error if function optimization fails
+     */
+    virtual void runOnFunction(IRFunction& function) = 0;
+
+    /**
+     * @brief Validates the function before optimization
+     * @param function Function to validate
+     * @throws std::runtime_error if validation fails
+     */
+    virtual void validateFunction(const IRFunction& function) const;
 };
 
-/*!
- * BasicBlockPass - 如果该Pass在一个basicBlock中做局部优化，不改变CFG
+/**
+ * @brief Pass that operates on individual basic blocks
+ * 
+ * BasicBlockPass is designed for optimizations that:
+ * - Operate within a single basic block
+ * - Do not change the control flow graph (CFG)
+ * - Perform local optimizations
  */
 class BasicBlockPass : public FunctionPass {
 public:
-    explicit BasicBlockPass(std::string name, int level);
-
-    /*!
-     * runOnBasicBlock - 在基本块上运行优化行为
-     * @param BB IRBasicBlock引用
+    /**
+     * @brief Constructs a BasicBlockPass
+     * @param pass_name Name of the pass
+     * @param optimization_level Optimization level
      */
-    virtual void runOnBasicBlock(IRBasicBlock &BB) = 0;
+    explicit BasicBlockPass(const std::string& pass_name, int optimization_level);
 
-    virtual void runOnFunction(IRFunction &F);
+    /**
+     * @brief Destructor
+     */
+    ~BasicBlockPass() override = default;
+
+protected:
+    /**
+     * @brief Runs the pass on a single function
+     * @param function Function to optimize
+     */
+    void runOnFunction(IRFunction& function) override;
+
+    /**
+     * @brief Runs the pass on a single basic block
+     * @param basic_block Basic block to optimize
+     * @throws std::runtime_error if basic block optimization fails
+     */
+    virtual void runOnBasicBlock(IRBasicBlock& basic_block) = 0;
+
+    /**
+     * @brief Validates the basic block before optimization
+     * @param basic_block Basic block to validate
+     * @throws std::runtime_error if validation fails
+     */
+    virtual void validateBasicBlock(const IRBasicBlock& basic_block) const;
 };
 
-#endif //COMPILER_PASS_H
+#endif // COMPILER_PASS_H
